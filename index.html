@@ -275,6 +275,7 @@ table.cpt .sc{
   <span class="count" id="count"></span>
   <button id="print">Print</button>
   <button id="export">Export JSON</button>
+  <button id="reset">Reset to defaults</button>
 </div>
 
 <div class="rules">
@@ -300,7 +301,10 @@ table.cpt .sc{
   and a detection-only improvement is flagged rather than allowed to close a row. Action Priority from the
   AIAG-VDA 2019 handbook is still shown small under each RPN for reference; it is a simplified form of the
   published table. Suppliers shipping under IATF 16949 are held to AP, so expect it on anything they send you.
-  Blank S/O/D means you haven't ranked it yet. Nothing is saved when you close the page — export before you leave.
+  Blank S/O/D means you haven't ranked it yet. Edits save automatically to this browser
+  (localStorage) and reload with the page — they do not sync anywhere else, so export JSON
+  for a portable copy or before switching browsers. Reset to defaults clears saved edits and
+  restores the built-in rows.
 </p>
 
 </div>
@@ -452,6 +456,23 @@ const ROWS = [
   ch:"", spec:"", method:"", samp:"", rx:"", todo:true
  }
 ];
+
+const ORIGINAL_ROWS = JSON.parse(JSON.stringify(ROWS));
+const STORAGE_KEY = "944-fmea-rows-v1";
+
+function loadSaved(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return;
+    const saved = JSON.parse(raw);
+    saved.forEach((s,i)=>{ if(ROWS[i]) Object.assign(ROWS[i], s); });
+  }catch(e){ /* corrupt or unavailable storage — fall back to defaults */ }
+}
+function saveRows(){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(ROWS)); }
+  catch(e){ /* storage unavailable — edits stay in-memory only */ }
+}
+loadSaved();
 
 /* Simplified AIAG-VDA Action Priority. Severity dominates; detection never rescues
    a high-severity, high-occurrence row. Verify against the published table for audit use. */
@@ -690,6 +711,7 @@ document.addEventListener("input",e=>{
   } else if(note){ note.remove(); }
   if(inp.dataset.k==="D") flagDetectionClose(row,r);
   audit();
+  saveRows();
 });
 $("#f-hi").onclick=e=>{hiOnly=!hiOnly;e.currentTarget.setAttribute("aria-pressed",hiOnly);render()};
 $("#expand").onclick=e=>{
@@ -716,6 +738,14 @@ function setView(v){
 $("#sort").onclick=e=>{
   byRpn=!byRpn;
   e.currentTarget.textContent=byRpn?"Group by system":"Rank by RPN";
+  render();
+};
+$("#reset").onclick=()=>{
+  if(!confirm("Reset to defaults? This clears every saved edit in this browser and cannot be undone.")) return;
+  ROWS.length=0;
+  ORIGINAL_ROWS.forEach(r=>ROWS.push(JSON.parse(JSON.stringify(r))));
+  ROWS.forEach(r=>{ r._base={S:r.S,O:r.O,D:r.D}; });
+  localStorage.removeItem(STORAGE_KEY);
   render();
 };
 $("#print").onclick=()=>window.print();
