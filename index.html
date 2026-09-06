@@ -363,6 +363,7 @@ table.sest td.status-fail{color:var(--hi);font-weight:600}
     <button id="c-post">Post comment</button>
   </div>
   <div class="clist" id="c-list"></div>
+  <button id="export-comments" style="margin-top:14px">Export comments</button>
 </section>
 
 <p class="foot">
@@ -860,6 +861,12 @@ document.addEventListener("click",e=>{
     const blob=new Blob([JSON.stringify(SESSIONS,null,2)],{type:"application/json"});
     const a=document.createElement("a");
     a.href=URL.createObjectURL(blob); a.download="944-fmea-sessions.json"; a.click();
+    return;
+  }
+  if(e.target.id==="export-comments"){
+    const blob=new Blob([JSON.stringify(COMMENTS,null,2)],{type:"application/json"});
+    const a=document.createElement("a");
+    a.href=URL.createObjectURL(blob); a.download="944-fmea-comments.json"; a.click();
     return;
   }
   const sdel=e.target.closest(".sess-del");
