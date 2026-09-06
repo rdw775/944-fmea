@@ -205,10 +205,30 @@ button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
   color:#16181c;font-family:"Archivo Narrow",sans-serif;margin:0 0 4px;font-size:22px}
 .chk > p{margin:0 0 14px;font-size:13.5px;color:var(--ink-2)}
 .chk-item{display:flex;gap:11px;padding:11px 0;border-top:1px solid var(--rule)}
-.chk-box{width:20px;height:20px;border:2px solid var(--rule-hard);flex:none;margin-top:2px}
+.chk-item.pass{background:#f6fbf7}
+.chk-item.fail{background:#fff6f6}
+.chk-box{
+  width:24px;height:24px;border:2px solid var(--rule-hard);flex:none;margin-top:2px;
+  cursor:pointer;background:#fff;padding:0;border-radius:0;
+  display:flex;align-items:center;justify-content:center;
+  font-family:"IBM Plex Mono",monospace;font-weight:700;font-size:14px;
+}
+.chk-box[data-status="pass"]{background:var(--lo);border-color:var(--lo);color:#fff}
+.chk-box[data-status="fail"]{background:var(--hi);border-color:var(--hi);color:#fff}
 .chk-item .t b{display:block;font-size:15px}
 .chk-item .t span{display:block;font-size:13px;color:var(--ink-2);margin-top:2px}
 .chk-item .t .rx{color:var(--hi);font-weight:600}
+.chk-note{
+  margin-top:7px;width:100%;font:inherit;font-size:13px;padding:6px 8px;
+  border:1px solid var(--rule-hard);border-radius:0;background:#fff;color:var(--ink);
+}
+.chk-head{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--rule)}
+.chk-head label{font-size:11.5px;color:var(--ink-3);display:flex;flex-direction:column;gap:4px}
+.chk-head input[type="date"],.chk-head input[type="text"]{
+  font:inherit;font-size:14px;padding:6px 8px;border:1px solid var(--rule-hard);border-radius:0;background:#fff;color:var(--ink);
+}
+.chk-head .sep{flex:1}
+.chk-msg{margin:14px 0 0;font-size:13.5px;font-weight:600}
 
 .cpwrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--rule-hard)}
 table.cpt{border-collapse:collapse;width:100%;min-width:900px;font-size:13px;background:var(--card)}
@@ -226,6 +246,42 @@ table.cpt .sc{
   display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:10px;
   border:1px solid var(--hi);color:var(--hi);padding:1px 4px;margin-top:3px;
 }
+.seswrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--rule-hard);margin-top:8px}
+table.sest{border-collapse:collapse;width:100%;min-width:680px;font-size:13px;background:var(--card)}
+table.sest th{
+  font-family:"Archivo Narrow",sans-serif;font-size:12px;text-align:left;
+  background:var(--ink);color:var(--paper);padding:8px 10px;font-weight:600;
+}
+table.sest td{padding:8px 10px;border-top:1px solid var(--rule);vertical-align:top;line-height:1.4}
+table.sest tr.fail td{background:#fff6f6}
+table.sest td.status-pass{color:var(--lo);font-weight:600}
+table.sest td.status-fail{color:var(--hi);font-weight:600}
+.sess-block{margin-top:22px}
+.sess-block:first-of-type{margin-top:0}
+.sess-hd{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding-bottom:10px;border-bottom:2px solid var(--rule-hard)}
+.sess-hd .sep{flex:1}
+.sess-hd .meta{font-size:12px;color:var(--ink-2);margin-top:2px}
+.log-empty{color:var(--ink-3);font-style:italic;font-size:13.5px}
+
+/* ---------- comment box ---------- */
+.comments{margin-top:26px;border:2px solid var(--tape);background:var(--card);padding:16px 18px}
+.comments h2{font-family:"Archivo Narrow",sans-serif;font-size:19px;margin:0 0 4px;color:var(--tape)}
+.comments > p{margin:0 0 14px;font-size:13px;color:var(--ink-2)}
+.cbox{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.cbox input[type="text"],.cbox textarea{
+  font:inherit;font-size:14px;padding:8px 10px;border:1px solid var(--rule-hard);border-radius:0;
+  background:#fff;color:var(--ink);resize:vertical;
+}
+.cbox textarea{min-height:70px}
+.cbox button{align-self:flex-start}
+.clist{display:flex;flex-direction:column;gap:12px}
+.citem{border-top:1px solid var(--rule);padding-top:10px}
+.citem .cwho{font-weight:600;font-size:13.5px}
+.citem .cwhen{font-size:11.5px;color:var(--ink-3);margin-left:6px}
+.citem .ctext{font-size:14px;margin-top:3px;white-space:pre-wrap;line-height:1.45}
+.citem .cdel{font-size:11px;padding:3px 8px;margin-top:6px}
+.clist-empty{color:var(--ink-3);font-style:italic;font-size:13.5px}
+
 .hide{display:none}
 .foot{margin-top:26px;font-size:12.5px;color:var(--ink-3);line-height:1.55;border-top:1px solid var(--rule);padding-top:12px}
 
@@ -238,7 +294,7 @@ table.cpt .sc{
 @media (prefers-color-scheme:dark){
   html,body,.wrap{background:#f2f3f0;color:#16181c}
   .sheet h1,.sys > h2,.rules h3,.chk h2{color:#16181c}
-  .row,.chain,.rules,.chk,table.cpt{background:#ffffff}
+  .row,.chain,.rules,.chk,table.cpt,table.sest,.comments{background:#ffffff}
   .audit{background:#ffffff}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
@@ -268,6 +324,7 @@ table.cpt .sc{
   <button id="v-fmea" aria-pressed="true">FMEA</button>
   <button id="v-cp" aria-pressed="false">Control plan</button>
   <button id="v-chk" aria-pressed="false">Pre-grid checklist</button>
+  <button id="v-log" aria-pressed="false">Session log</button>
   <button id="f-hi" aria-pressed="false">Needs action only</button>
   <button id="sort">Group by system</button>
   <button id="expand">Expand all</button>
@@ -294,6 +351,19 @@ table.cpt .sc{
 <section id="cplan" class="chk hide"></section>
 
 <section id="checklist" class="chk hide"></section>
+
+<section id="seclog" class="chk hide"></section>
+
+<section class="comments" id="comments">
+  <h2>Shane know's I'm a moron so input comments here</h2>
+  <p>Banked to this browser — say what's wrong, what's missing, or what should change.</p>
+  <div class="cbox">
+    <input type="text" id="c-name" placeholder="Name (optional)">
+    <textarea id="c-text" placeholder="Type a comment..."></textarea>
+    <button id="c-post">Post comment</button>
+  </div>
+  <div class="clist" id="c-list"></div>
+</section>
 
 <p class="foot">
   Ranking runs on RPN — severity × occurrence × detection — with an action threshold of 100.
@@ -474,6 +544,29 @@ function saveRows(){
 }
 loadSaved();
 
+const SESSIONS_KEY = "944-fmea-sessions-v1";
+function loadSessions(){
+  try{ return JSON.parse(localStorage.getItem(SESSIONS_KEY)) || []; }
+  catch(e){ return []; }
+}
+function saveSessions(){
+  try{ localStorage.setItem(SESSIONS_KEY, JSON.stringify(SESSIONS)); }
+  catch(e){ /* storage unavailable */ }
+}
+let SESSIONS = loadSessions();
+let DRAFT = {}; // in-progress checklist responses, keyed by characteristic text
+
+const COMMENTS_KEY = "944-fmea-comments-v1";
+function loadComments(){
+  try{ return JSON.parse(localStorage.getItem(COMMENTS_KEY)) || []; }
+  catch(e){ return []; }
+}
+function saveComments(){
+  try{ localStorage.setItem(COMMENTS_KEY, JSON.stringify(COMMENTS)); }
+  catch(e){ /* storage unavailable */ }
+}
+let COMMENTS = loadComments();
+
 /* Simplified AIAG-VDA Action Priority. Severity dominates; detection never rescues
    a high-severity, high-occurrence row. Verify against the published table for audit use. */
 function ap(S,O,D){
@@ -542,6 +635,10 @@ let hiOnly=false, allOpen=false, view="fmea", byRpn=true;
 
 function f(k,v){
   return `<div class="field"><div class="k">${k}</div><div class="v${v?"":" empty"}">${v||"Not filled in yet — this one is yours"}</div></div>`;
+}
+
+function esc(s){
+  return String(s).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
 }
 
 function render(){
@@ -664,18 +761,82 @@ function controlPlan(){
 
 function checklist(){
   const items=ROWS.filter(r=>r.ch&&r.method).sort((a,b)=>(rpn(b.S,b.O,b.D)??-1)-(rpn(a.S,a.O,a.D)??-1));
+  const today=new Date().toISOString().slice(0,10);
   $("#checklist").innerHTML=`
     <h2>Pre-grid checklist</h2>
-    <p>Generated from the control plan rows. Highest RPN first. Nothing here was invented for the checklist — every line traces back to a failure mode.</p>
-    ${items.map(r=>`
-      <div class="chk-item">
-        <div class="chk-box"></div>
+    <p>Generated from the control plan rows. Highest RPN first. Click a box to mark pass or fail — fail prompts for a note. Save session banks this run to the log below for later review.</p>
+    <div class="chk-head">
+      <label>Session date<input type="date" id="sess-date" value="${today}"></label>
+      <label>Session note (optional)<input type="text" id="sess-note" placeholder="e.g. Laguna Seca test day"></label>
+      <span class="sep"></span>
+      <button id="sess-save">Save session</button>
+    </div>
+    ${items.map(r=>{
+      const d=DRAFT[r.ch]||{};
+      const st=d.status;
+      return `
+      <div class="chk-item${st?" "+st:""}">
+        <button type="button" class="chk-box" data-status="${st||""}" data-ch="${esc(r.ch)}" aria-label="Mark ${esc(r.ch)} pass or fail">${st==="pass"?"✓":st==="fail"?"✕":""}</button>
         <div class="t">
           <b>${r.ch}</b>
           <span>${r.spec} — ${r.method} — ${r.samp}</span>
           <span class="rx">If it fails: ${r.rx}</span>
+          ${st==="fail"?`<input type="text" class="chk-note" data-ch="${esc(r.ch)}" placeholder="What did you find?" value="${esc(d.note||"")}">`:""}
         </div>
-      </div>`).join("")}`;
+      </div>`;
+    }).join("")}
+    <p class="chk-msg" id="chk-msg" hidden></p>`;
+}
+
+function sessionLog(){
+  const host=$("#seclog");
+  if(!SESSIONS.length){
+    host.innerHTML=`<h2>Session log</h2><p class="log-empty">No sessions banked yet. Fill out the pre-grid checklist and hit Save session.</p>`;
+    return;
+  }
+  const sorted=[...SESSIONS].sort((a,b)=>b.ts-a.ts);
+  host.innerHTML=`
+    <h2>Session log</h2>
+    <p>${SESSIONS.length} session${SESSIONS.length>1?"s":""} banked, most recent first. Saved to this browser only —
+    <button id="export-log">export session log</button> for a portable copy.</p>
+    ${sorted.map(s=>{
+      const passes=s.entries.filter(e=>e.status==="pass").length;
+      const fails=s.entries.filter(e=>e.status==="fail").length;
+      const unchecked=s.entries.filter(e=>e.status==="unchecked").length;
+      return `
+      <div class="sess-block">
+        <div class="sess-hd">
+          <div><b>${esc(s.date)}</b>${s.note?` — ${esc(s.note)}`:""}<div class="meta">${passes} passed, ${fails} failed, ${unchecked} unchecked</div></div>
+          <span class="sep"></span>
+          <button class="sess-del" data-ts="${s.ts}">Delete session</button>
+        </div>
+        <div class="seswrap"><table class="sest">
+          <thead><tr><th>System</th><th>Characteristic</th><th>Status</th><th>Note</th></tr></thead>
+          <tbody>
+          ${s.entries.map(e=>`<tr class="${e.status==="fail"?"fail":""}">
+            <td>${esc(e.sys)}</td><td>${esc(e.ch)}</td>
+            <td class="status-${e.status}">${esc(e.status)}</td>
+            <td>${e.note?esc(e.note):"—"}</td>
+          </tr>`).join("")}
+          </tbody>
+        </table></div>
+      </div>`;
+    }).join("")}`;
+}
+
+function renderComments(){
+  const list=$("#c-list");
+  if(!COMMENTS.length){
+    list.innerHTML=`<p class="clist-empty">No comments yet — be the first to say something.</p>`;
+    return;
+  }
+  const sorted=[...COMMENTS].sort((a,b)=>b.ts-a.ts);
+  list.innerHTML=sorted.map(c=>`
+    <div class="citem">
+      <span class="cwho">${esc(c.name||"Anonymous")}</span><span class="cwhen">${esc(new Date(c.ts).toLocaleString())}</span>
+      <div class="ctext">${esc(c.text)}</div>
+      <button class="cdel" data-ts="${c.ts}">Delete</button>
+    </div>`).join("");
 }
 
 document.addEventListener("click",e=>{
@@ -683,8 +844,89 @@ document.addEventListener("click",e=>{
   if(h){
     const row=h.closest(".row"), open=row.classList.toggle("open");
     h.setAttribute("aria-expanded",open);
+    return;
+  }
+  const box=e.target.closest(".chk-box");
+  if(box){
+    const ch=box.dataset.ch;
+    const cur=DRAFT[ch]||{};
+    const next=cur.status==="pass"?"fail":cur.status==="fail"?undefined:"pass";
+    DRAFT[ch]={...cur,status:next};
+    checklist();
+    return;
+  }
+  if(e.target.id==="sess-save"){ saveSession(); return; }
+  if(e.target.id==="export-log"){
+    const blob=new Blob([JSON.stringify(SESSIONS,null,2)],{type:"application/json"});
+    const a=document.createElement("a");
+    a.href=URL.createObjectURL(blob); a.download="944-fmea-sessions.json"; a.click();
+    return;
+  }
+  const sdel=e.target.closest(".sess-del");
+  if(sdel){
+    if(confirm("Delete this banked session? This cannot be undone.")){
+      const ts=Number(sdel.dataset.ts);
+      SESSIONS=SESSIONS.filter(s=>s.ts!==ts);
+      saveSessions();
+      sessionLog();
+    }
+    return;
+  }
+  if(e.target.id==="c-post"){
+    const nameInp=$("#c-name"), textInp=$("#c-text");
+    const text=textInp.value.trim();
+    if(!text) return;
+    COMMENTS.push({name:nameInp.value.trim(), text, ts:Date.now()});
+    saveComments();
+    textInp.value="";
+    renderComments();
+    return;
+  }
+  const cdel=e.target.closest(".cdel");
+  if(cdel){
+    const ts=Number(cdel.dataset.ts);
+    COMMENTS=COMMENTS.filter(c=>c.ts!==ts);
+    saveComments();
+    renderComments();
+    return;
   }
 });
+document.addEventListener("input",e=>{
+  const note=e.target.closest(".chk-note");
+  if(note){
+    const ch=note.dataset.ch;
+    DRAFT[ch]={...(DRAFT[ch]||{}),note:note.value};
+    return;
+  }
+});
+function saveSession(){
+  const dateInp=$("#sess-date"), noteInp=$("#sess-note"), msg=$("#chk-msg");
+  const items=ROWS.filter(r=>r.ch&&r.method);
+  const entries=items.map(r=>({
+    ch:r.ch, sys:r.sys,
+    status:(DRAFT[r.ch]&&DRAFT[r.ch].status)||"unchecked",
+    note:(DRAFT[r.ch]&&DRAFT[r.ch].note)||""
+  }));
+  const checked=entries.filter(en=>en.status!=="unchecked").length;
+  if(checked===0){
+    msg.hidden=false; msg.style.color="var(--hi)";
+    msg.textContent="Mark at least one item before saving — nothing to bank yet.";
+    return;
+  }
+  SESSIONS.push({
+    date: dateInp.value || new Date().toISOString().slice(0,10),
+    note: noteInp.value || "",
+    ts: Date.now(),
+    entries
+  });
+  saveSessions();
+  const fails=entries.filter(en=>en.status==="fail").length;
+  DRAFT={};
+  checklist();
+  const msg2=$("#chk-msg");
+  msg2.hidden=false; msg2.style.color="var(--lo)";
+  msg2.textContent=`Session banked — ${checked} of ${entries.length} items checked, ${fails} failed. See Session log.`;
+}
 document.addEventListener("input",e=>{
   const inp=e.target.closest("input[data-k]");
   if(!inp) return;
@@ -720,11 +962,13 @@ $("#expand").onclick=e=>{
 $("#v-fmea").onclick=()=>setView("fmea");
 $("#v-cp").onclick=()=>setView("cp");
 $("#v-chk").onclick=()=>setView("chk");
+$("#v-log").onclick=()=>setView("log");
 function setView(v){
   view=v;
   $("#v-fmea").setAttribute("aria-pressed",v==="fmea");
   $("#v-cp").setAttribute("aria-pressed",v==="cp");
   $("#v-chk").setAttribute("aria-pressed",v==="chk");
+  $("#v-log").setAttribute("aria-pressed",v==="log");
   $("#fmea").classList.toggle("hide",v!=="fmea");
   $("#audit").classList.toggle("hide",v!=="fmea");
   $("#f-hi").classList.toggle("hide",v!=="fmea");
@@ -732,8 +976,10 @@ function setView(v){
   $("#sort").classList.toggle("hide",v!=="fmea");
   $("#cplan").classList.toggle("hide",v!=="cp");
   $("#checklist").classList.toggle("hide",v!=="chk");
+  $("#seclog").classList.toggle("hide",v!=="log");
   if(v==="cp") controlPlan();
   if(v==="chk") checklist();
+  if(v==="log") sessionLog();
 }
 $("#sort").onclick=e=>{
   byRpn=!byRpn;
@@ -755,6 +1001,7 @@ $("#export").onclick=()=>{
   a.href=URL.createObjectURL(blob); a.download="944-fmea.json"; a.click();
 };
 render();
+renderComments();
 </script>
 </body>
 </html>
