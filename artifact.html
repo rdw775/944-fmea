@@ -213,13 +213,20 @@ button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
 .chg-entry-reason{font-size:13.5px;margin-top:2px}
 
 .submit-all{
-  border:2px solid var(--tape);background:var(--card);padding:14px 16px;
-  margin:6px 0 26px;display:flex;flex-wrap:wrap;align-items:center;gap:14px;
+  border:2px solid var(--tape);background:var(--card);padding:18px 20px;
+  margin:6px 0 26px;display:flex;flex-direction:column;gap:12px;
 }
-.submit-all .info{flex:1;min-width:220px;font-size:13.5px;color:var(--ink-2)}
-.submit-all .info b{display:block;font-family:"Archivo Narrow",sans-serif;font-size:15px;color:var(--ink);margin-bottom:2px}
-.submit-all .info .missing{display:block;color:var(--hi);font-weight:600;margin-top:2px}
-.submit-all button{white-space:nowrap}
+.submit-all .info{font-size:14px;color:var(--ink-2)}
+.submit-all .info b{display:block;font-family:"Archivo Narrow",sans-serif;font-size:16px;color:var(--ink);margin-bottom:3px}
+.submit-all .info .missing{display:block;color:var(--hi);font-weight:600;margin-top:3px}
+#submitAllBtn{
+  width:100%;padding:22px 20px;font-size:20px;font-weight:700;letter-spacing:.02em;
+  font-family:"Archivo Narrow",sans-serif;text-transform:uppercase;
+  background:var(--tape);color:#fff;border:2px solid var(--tape);border-radius:0;cursor:pointer;
+}
+#submitAllBtn:hover:not(:disabled){background:#1543ad;border-color:#1543ad;color:#fff}
+#submitAllBtn:disabled{background:var(--paper);color:var(--ink-3);border-color:var(--rule);cursor:not-allowed}
+#submitAllBtn:focus-visible{outline:3px solid var(--hi);outline-offset:2px}
 
 .cp{margin-top:12px;border:1px solid var(--rule-hard);padding:11px 13px;background:#fbfbf8}
 .cp h4{font-family:"Archivo Narrow",sans-serif;margin:0 0 7px;font-size:15px}
