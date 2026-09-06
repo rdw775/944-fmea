@@ -201,14 +201,21 @@ button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
   width:100%;font:inherit;font-size:14px;padding:7px 9px;border:1px solid var(--rule-hard);
   border-radius:0;background:#fff;color:var(--ink);resize:vertical;min-height:44px;
 }
-.chg-row{display:flex;align-items:center;gap:10px;margin-top:8px}
-.chg-hint{font-size:12.5px;color:var(--hi);font-weight:600}
 .chg-history{margin-top:12px;border-top:1px dashed var(--rule);padding-top:10px}
 .chg-history-title{font-family:"Archivo Narrow",sans-serif;font-size:12.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.03em;margin-bottom:6px}
 .chg-entry{margin-bottom:8px}
 .chg-entry:last-child{margin-bottom:0}
 .chg-entry-meta{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--ink-3)}
 .chg-entry-reason{font-size:13.5px;margin-top:2px}
+
+.submit-all{
+  border:2px solid var(--tape);background:var(--card);padding:14px 16px;
+  margin:6px 0 26px;display:flex;flex-wrap:wrap;align-items:center;gap:14px;
+}
+.submit-all .info{flex:1;min-width:220px;font-size:13.5px;color:var(--ink-2)}
+.submit-all .info b{display:block;font-family:"Archivo Narrow",sans-serif;font-size:15px;color:var(--ink);margin-bottom:2px}
+.submit-all .info .missing{display:block;color:var(--hi);font-weight:600;margin-top:2px}
+.submit-all button{white-space:nowrap}
 
 .cp{margin-top:12px;border:1px solid var(--rule-hard);padding:11px 13px;background:#fbfbf8}
 .cp h4{font-family:"Archivo Narrow",sans-serif;margin:0 0 7px;font-size:15px}
@@ -332,7 +339,7 @@ table.sevt td.n{font-family:"IBM Plex Mono",monospace;font-weight:600;white-spac
 @media (prefers-color-scheme:dark){
   html,body,.wrap{background:#f2f3f0;color:#16181c}
   .sheet h1,.sys > h2,.rules h3,.chk h2{color:#16181c}
-  .row,.chain,.rules,.chk,.ref,table.cpt,table.sest,table.sevt,.comments{background:#ffffff}
+  .row,.chain,.rules,.chk,.ref,table.cpt,table.sest,table.sevt,.comments,.submit-all{background:#ffffff}
   .audit{background:#ffffff}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
@@ -386,6 +393,11 @@ table.sevt td.n{font-family:"IBM Plex Mono",monospace;font-weight:600;white-spac
 <div class="audit" id="audit"></div>
 
 <main id="fmea"></main>
+
+<div class="submit-all" id="submitAll">
+  <div class="info" id="submitAllInfo">No pending score changes.</div>
+  <button type="button" id="submitAllBtn" disabled>Submit all changes</button>
+</div>
 
 <section id="cplan" class="chk hide"></section>
 
@@ -481,11 +493,12 @@ table.sevt td.n{font-family:"IBM Plex Mono",monospace;font-weight:600;white-spac
   and a detection-only improvement is flagged rather than allowed to close a row. Action Priority from the
   AIAG-VDA 2019 handbook is still shown small under each RPN for reference; it is a simplified form of the
   published table. Suppliers shipping under IATF 16949 are held to AP, so expect it on anything they send you.
-  Blank S/O/D means you haven't ranked it yet. Editing a score requires a written reason before
-  it saves, and every accepted change is kept in that row's permanent change history. Saved data
-  lives in this browser (localStorage) and reloads with the page — it does not sync anywhere else,
-  so export JSON for a portable copy or before switching browsers. Reset to defaults clears saved
-  edits and change history and restores the built-in rows.
+  Blank S/O/D means you haven't ranked it yet. Editing a score requires a written reason; nothing
+  saves until you hit Submit all changes at the bottom of this list, which logs every changed row's
+  reason to its permanent change history in one action. Saved data lives in this browser
+  (localStorage) and reloads with the page — it does not sync anywhere else, so export JSON for a
+  portable copy or before switching browsers. Reset to defaults clears saved edits and change
+  history and restores the built-in rows.
 </p>
 
 </div>
@@ -762,30 +775,38 @@ function historyHtml(r){
   if(!r.history||!r.history.length) return "";
   return `<div class="chg-history"><div class="chg-history-title">Change history</div>${[...r.history].reverse().map(historyEntryHtml).join("")}</div>`;
 }
-function refreshChgHistory(row,r){
-  const body=row.querySelector(".chg");
-  let hist=row.querySelector(".chg-history");
-  if(!r.history||!r.history.length){
-    if(hist) hist.remove();
+let CHANGE_DRAFT = {}; // pending, not-yet-submitted reason text, keyed by row index
+
+function isDirty(r){
+  const s=r._synced||{S:r.S,O:r.O,D:r.D};
+  return r.S!==s.S||r.O!==s.O||r.D!==s.D;
+}
+function pendingChanges(){
+  return ROWS.map((r,i)=>({i,r})).filter(({r})=>isDirty(r));
+}
+function updateSubmitAll(){
+  const bar=$("#submitAll");
+  if(!bar) return;
+  const info=$("#submitAllInfo"), btn=$("#submitAllBtn");
+  const pending=pendingChanges();
+  if(!pending.length){
+    info.innerHTML="No pending score changes.";
+    btn.disabled=true;
     return;
   }
-  const html=`<div class="chg-history-title">Change history</div>${[...r.history].reverse().map(historyEntryHtml).join("")}`;
-  if(!hist){
-    hist=document.createElement("div");
-    hist.className="chg-history";
-    body.appendChild(hist);
+  const missing=pending.filter(({i})=>!(CHANGE_DRAFT[i]&&CHANGE_DRAFT[i].trim()));
+  if(missing.length){
+    info.innerHTML=`<b>${pending.length} score${pending.length>1?"s":""} changed</b><span class="missing">${missing.length} still need${missing.length===1?"s":""} a reason before you can submit: ${missing.map(({r})=>esc(r.fm)).join(", ")}</span>`;
+    btn.disabled=true;
+  } else {
+    info.innerHTML=`<b>${pending.length} change${pending.length>1?"s":""} ready</b>Every changed score has a reason. Submit to log ${pending.length>1?"them":"it"}.`;
+    btn.disabled=false;
   }
-  hist.innerHTML=html;
 }
 function updateChangeGate(row,r){
-  const synced=r._synced||{S:r.S,O:r.O,D:r.D};
-  const dirty=r.S!==synced.S||r.O!==synced.O||r.D!==synced.D;
-  const saveBtn=row.querySelector(".chg-save");
-  const reasonEl=row.querySelector(".chg-reason");
-  const reason=reasonEl?reasonEl.value.trim():"";
-  if(saveBtn) saveBtn.disabled=!(dirty&&reason);
   const sod=row.querySelector(".sod");
-  if(sod) sod.classList.toggle("dirty",dirty);
+  if(sod) sod.classList.toggle("dirty",isDirty(r));
+  updateSubmitAll();
 }
 
 function render(){
@@ -819,12 +840,8 @@ function render(){
         </div>
         ${gate?`<div class="gate-note"><b>Severity gate — action required</b>${gate}</div>`:""}
         <div class="chg">
-          <label class="chg-label" for="chg-reason-${i}">Reason for change <span class="req">(required to save an edited score)</span></label>
-          <textarea class="chg-reason" id="chg-reason-${i}" data-i="${i}" placeholder="What did you observe or confirm that changes this score?"></textarea>
-          <div class="chg-row">
-            <button type="button" class="chg-save" data-i="${i}" disabled>Save change</button>
-            <span class="chg-hint" hidden>Enter a reason before saving.</span>
-          </div>
+          <label class="chg-label" for="chg-reason-${i}">Reason for change <span class="req">(required to submit an edited score)</span></label>
+          <textarea class="chg-reason" id="chg-reason-${i}" data-i="${i}" placeholder="What did you observe or confirm that changes this score?">${esc(CHANGE_DRAFT[i]||"")}</textarea>
           ${historyHtml(r)}
         </div>
         ${f("Cause — the mechanism, not the purchase decision",r.cause)}
@@ -874,16 +891,17 @@ function audit(){
   if(!broken.length&&!gates.length&&!cheats.length&&!unranked.length){
     box.className="audit clean";
     box.innerHTML="<b>Chain intact</b><p>Every row needing action has a control, no severity gates are open, and nothing was closed on detection alone.</p>";
-    return;
+  } else {
+    box.className="audit";
+    let h="<b>Chain check</b><ul>";
+    broken.forEach(r=>h+=`<li>Needs action, no control: ${r.fm}</li>`);
+    gates.forEach(r=>h+=`<li>Severity gate open (sev ${r.S}, RPN ${rpn(r.S,r.O,r.D)}): ${r.fm}</li>`);
+    cheats.forEach(r=>h+=`<li>Closed on detection alone: ${r.fm}</li>`);
+    if(unranked.length) h+=`<li>${unranked.length} row${unranked.length>1?"s":""} unranked — no S/O/D, so no RPN</li>`;
+    h+="</ul>";
+    box.innerHTML=h;
   }
-  box.className="audit";
-  let h="<b>Chain check</b><ul>";
-  broken.forEach(r=>h+=`<li>Needs action, no control: ${r.fm}</li>`);
-  gates.forEach(r=>h+=`<li>Severity gate open (sev ${r.S}, RPN ${rpn(r.S,r.O,r.D)}): ${r.fm}</li>`);
-  cheats.forEach(r=>h+=`<li>Closed on detection alone: ${r.fm}</li>`);
-  if(unranked.length) h+=`<li>${unranked.length} row${unranked.length>1?"s":""} unranked — no S/O/D, so no RPN</li>`;
-  h+="</ul>";
-  box.innerHTML=h;
+  updateSubmitAll();
 }
 
 function controlPlan(){
@@ -1052,29 +1070,22 @@ document.addEventListener("click",e=>{
     renderComments();
     return;
   }
-  const chgSave=e.target.closest(".chg-save");
-  if(chgSave){
-    const i=Number(chgSave.dataset.i);
-    const r=ROWS[i];
-    const row=chgSave.closest(".row");
-    const reasonEl=row.querySelector(".chg-reason");
-    const reason=reasonEl.value.trim();
-    const synced=r._synced||{S:r.S,O:r.O,D:r.D};
-    const dirty=r.S!==synced.S||r.O!==synced.O||r.D!==synced.D;
-    if(!dirty) return;
-    if(!reason){
-      row.querySelector(".chg-hint").hidden=false;
-      return;
-    }
-    const entry={ts:Date.now(), reason, from:{...synced}, to:{S:r.S,O:r.O,D:r.D}};
-    r.history=[...(r.history||[]), entry];
-    r._synced={S:r.S,O:r.O,D:r.D};
+  if(e.target.id==="submitAllBtn"){
+    const pending=pendingChanges();
+    const missing=pending.filter(({i})=>!(CHANGE_DRAFT[i]&&CHANGE_DRAFT[i].trim()));
+    if(!pending.length||missing.length) return;
+    const ts=Date.now();
+    pending.forEach(({i,r})=>{
+      const synced=r._synced||{S:r.S,O:r.O,D:r.D};
+      const entry={ts, reason:CHANGE_DRAFT[i].trim(), from:{...synced}, to:{S:r.S,O:r.O,D:r.D}};
+      r.history=[...(r.history||[]), entry];
+      r._synced={S:r.S,O:r.O,D:r.D};
+    });
+    CHANGE_DRAFT={};
     saveRows();
-    reasonEl.value="";
-    row.querySelector(".chg-hint").hidden=true;
-    row.querySelector(".sod").classList.remove("dirty");
-    chgSave.disabled=true;
-    refreshChgHistory(row,r);
+    render();
+    const info=$("#submitAllInfo");
+    info.innerHTML=`<b>${pending.length} change${pending.length>1?"s":""} submitted</b>Logged to change history.`;
     return;
   }
 });
@@ -1088,8 +1099,8 @@ document.addEventListener("input",e=>{
   const reasonEl=e.target.closest(".chg-reason");
   if(reasonEl){
     const i=Number(reasonEl.dataset.i);
-    const row=reasonEl.closest(".row");
-    updateChangeGate(row,ROWS[i]);
+    CHANGE_DRAFT[i]=reasonEl.value;
+    updateSubmitAll();
     return;
   }
 });
@@ -1166,6 +1177,7 @@ function setView(v){
   $("#v-log").setAttribute("aria-pressed",v==="log");
   $("#v-ref").setAttribute("aria-pressed",v==="ref");
   $("#fmea").classList.toggle("hide",v!=="fmea");
+  $("#submitAll").classList.toggle("hide",v!=="fmea");
   $("#audit").classList.toggle("hide",v!=="fmea");
   $("#f-hi").classList.toggle("hide",v!=="fmea");
   $("#expand").classList.toggle("hide",v!=="fmea");
