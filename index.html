@@ -192,6 +192,23 @@ button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
   padding:6px 8px;border:1px solid var(--rule-hard);border-radius:0;background:#fff;color:var(--ink);
 }
 .sod input:focus-visible{outline:3px solid var(--tape);outline-offset:1px}
+.sod.dirty input{border-color:var(--md);border-width:2px}
+
+.chg{margin:12px 0;border:1px solid var(--rule-hard);padding:11px 13px;background:#fffdf6}
+.chg-label{display:block;font-size:11.5px;color:var(--ink-3);margin-bottom:6px}
+.chg-label .req{color:var(--md);font-weight:600}
+.chg textarea.chg-reason{
+  width:100%;font:inherit;font-size:14px;padding:7px 9px;border:1px solid var(--rule-hard);
+  border-radius:0;background:#fff;color:var(--ink);resize:vertical;min-height:44px;
+}
+.chg-row{display:flex;align-items:center;gap:10px;margin-top:8px}
+.chg-hint{font-size:12.5px;color:var(--hi);font-weight:600}
+.chg-history{margin-top:12px;border-top:1px dashed var(--rule);padding-top:10px}
+.chg-history-title{font-family:"Archivo Narrow",sans-serif;font-size:12.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.03em;margin-bottom:6px}
+.chg-entry{margin-bottom:8px}
+.chg-entry:last-child{margin-bottom:0}
+.chg-entry-meta{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--ink-3)}
+.chg-entry-reason{font-size:13.5px;margin-top:2px}
 
 .cp{margin-top:12px;border:1px solid var(--rule-hard);padding:11px 13px;background:#fbfbf8}
 .cp h4{font-family:"Archivo Narrow",sans-serif;margin:0 0 7px;font-size:15px}
@@ -263,6 +280,27 @@ table.sest td.status-fail{color:var(--hi);font-weight:600}
 .sess-hd .meta{font-size:12px;color:var(--ink-2);margin-top:2px}
 .log-empty{color:var(--ink-3);font-style:italic;font-size:13.5px}
 
+/* ---------- reference guide ---------- */
+.ref{background:var(--card);border:1px solid var(--rule-hard);padding:16px 18px 6px}
+.ref h2{color:#16181c;font-family:"Archivo Narrow",sans-serif;margin:0 0 4px;font-size:22px}
+.ref > p.lede{margin:0 0 18px;font-size:13.5px;color:var(--ink-2)}
+.ref section{margin-bottom:26px}
+.ref h3{font-family:"Archivo Narrow",sans-serif;font-size:17px;margin:0 0 8px;padding-bottom:5px;border-bottom:2px solid var(--rule-hard)}
+.ref h4{font-family:"Archivo Narrow",sans-serif;font-size:14.5px;margin:14px 0 4px}
+.ref p{margin:0 0 10px;font-size:14px;line-height:1.55;color:var(--ink-2)}
+.ref p:last-child{margin-bottom:0}
+.ref ul,.ref ol{margin:0 0 10px;padding-left:20px;font-size:14px;line-height:1.55;color:var(--ink-2)}
+.ref li{margin-bottom:4px}
+.ref .chain-mini{display:flex;flex-wrap:wrap;gap:0;border:1px solid var(--rule);margin-bottom:12px}
+.ref .chain-mini div{flex:1 1 140px;padding:9px 12px;border-right:1px solid var(--rule);font-size:12.5px;color:var(--ink-2)}
+.ref .chain-mini div:last-child{border-right:0}
+.ref .chain-mini b{display:block;font-family:"Archivo Narrow",sans-serif;font-size:13px;color:var(--ink);margin-bottom:2px}
+.sevwrap{overflow-x:auto;border:1px solid var(--rule-hard);margin-bottom:10px}
+table.sevt{border-collapse:collapse;width:100%;min-width:420px;font-size:13.5px;background:var(--card)}
+table.sevt th{font-family:"Archivo Narrow",sans-serif;font-size:12px;text-align:left;background:var(--ink);color:var(--paper);padding:7px 10px;font-weight:600}
+table.sevt td{padding:7px 10px;border-top:1px solid var(--rule)}
+table.sevt td.n{font-family:"IBM Plex Mono",monospace;font-weight:600;white-space:nowrap}
+
 /* ---------- comment box ---------- */
 .comments{margin-top:26px;border:2px solid var(--tape);background:var(--card);padding:16px 18px}
 .comments h2{font-family:"Archivo Narrow",sans-serif;font-size:19px;margin:0 0 4px;color:var(--tape)}
@@ -294,7 +332,7 @@ table.sest td.status-fail{color:var(--hi);font-weight:600}
 @media (prefers-color-scheme:dark){
   html,body,.wrap{background:#f2f3f0;color:#16181c}
   .sheet h1,.sys > h2,.rules h3,.chk h2{color:#16181c}
-  .row,.chain,.rules,.chk,table.cpt,table.sest,.comments{background:#ffffff}
+  .row,.chain,.rules,.chk,.ref,table.cpt,table.sest,table.sevt,.comments{background:#ffffff}
   .audit{background:#ffffff}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
@@ -325,6 +363,7 @@ table.sest td.status-fail{color:var(--hi);font-weight:600}
   <button id="v-cp" aria-pressed="false">Control plan</button>
   <button id="v-chk" aria-pressed="false">Pre-grid checklist</button>
   <button id="v-log" aria-pressed="false">Session log</button>
+  <button id="v-ref" aria-pressed="false">Reference guide</button>
   <button id="f-hi" aria-pressed="false">Needs action only</button>
   <button id="sort">Group by system</button>
   <button id="expand">Expand all</button>
@@ -354,6 +393,76 @@ table.sest td.status-fail{color:var(--hi);font-weight:600}
 
 <section id="seclog" class="chk hide"></section>
 
+<section id="refguide" class="ref hide">
+  <h2>Reference guide</h2>
+  <p class="lede">The methodology this tool runs on. Read this before scoring anything for the first time, or whenever a score change needs a second opinion.</p>
+
+  <section>
+    <h3>The core idea</h3>
+    <p>Process flow → FMEA → control plan is one chain, three views of the same row. Every step in the flow becomes a row in the FMEA. Every failure mode that ranks high enough generates a control that lands in the control plan.</p>
+    <div class="chain-mini">
+      <div><b>Process flow</b>What are the steps?</div>
+      <div><b>FMEA</b>How does each step fail, how bad, how likely, will we catch it?</div>
+      <div><b>Control plan</b>What do we check, to what spec, how often, and what do we do when it fails?</div>
+    </div>
+    <p><b>The traceability test</b> — run this before anyone else does: a control in the plan that no FMEA row justifies means asking where it came from; a high-ranked failure mode with no matching control means the chain is broken. Most audit findings live here, not in the arithmetic.</p>
+  </section>
+
+  <section>
+    <h3>Writing rows that hold up</h3>
+    <h4>Failure mode</h4>
+    <p>A mechanism, never a part name or a purchase decision. Not "cheap eBay axle" — that's a purchasing decision. Yes "joint loses clamp load." If a row can be fixed by "buy a better one," it isn't a failure mode yet — keep asking <em>how</em> until you reach something physical.</p>
+    <h4>Effect and severity</h4>
+    <p>Rank the worst credible outcome, not the one that happened. If a failure occurred once and nothing bad came of it, that was luck — luck is not a control. Severity is a property of the effect; it does not change because an inspection was added.</p>
+    <h4>Cause</h4>
+    <p>The mechanism producing the failure mode. One row per cause — if two causes need two different fixes, they're two rows.</p>
+    <h4>Prevention vs. detection</h4>
+    <p>Prevention acts on occurrence — design change, spec change, tooling. Detection acts on detection only — inspection, gauging, test. Prevention wins; detection just tells you the failure already happened.</p>
+  </section>
+
+  <section>
+    <h3>Severity anchors</h3>
+    <div class="sevwrap"><table class="sevt">
+      <thead><tr><th>Score</th><th>Effect</th></tr></thead>
+      <tbody>
+        <tr><td class="n">10</td><td>Safety consequence without warning</td></tr>
+        <tr><td class="n">9</td><td>Safety consequence with warning</td></tr>
+        <tr><td class="n">7–8</td><td>Loss of primary function — DNF</td></tr>
+        <tr><td class="n">4–6</td><td>Degraded function — costs lap time</td></tr>
+        <tr><td class="n">1–3</td><td>Minor or annoying</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section>
+    <h3>Scoring — RPN with two rules</h3>
+    <p><b>RPN = Severity × Occurrence × Detection.</b> Action threshold: RPN ≥ 100. It's the language most teams and suppliers speak, and it sorts a long list acceptably fast — but it has two known holes, patched here with explicit rules rather than judgment calls.</p>
+    <h4>Rule 1 — severity gate</h4>
+    <p>Any severity 9 or 10 gets an action regardless of RPN. Multiplication lets a low factor cancel a high one: severity 10 × occurrence 2 × detection 2 = RPN 40, reading as trivial — but the effect is still a safety event.</p>
+    <h4>Rule 2 — detection never closes a row</h4>
+    <p>Only a reduction in severity or occurrence closes an action. Improving detection from 8 to 3 cuts RPN by more than half while changing nothing about the process — the failure is exactly as likely and exactly as bad, you just got better at watching it happen.</p>
+    <h4>Why these exist</h4>
+    <p>AIAG-VDA 2019 replaced RPN with Action Priority (AP) — a lookup table where severity dominates and detection can't rescue a high-severity, high-occurrence row. The two rules above reproduce AP's protection while keeping RPN's familiar language. Any supplier under IATF 16949 is likely scoring in AP — read theirs that way.</p>
+  </section>
+
+  <section>
+    <h3>Justifying a score change</h3>
+    <p>Every S/O/D edit in this tool requires a reason before it saves, and that reason is kept permanently in the row's change history — visible to anyone who opens this browser's copy later. A good reason names what changed in the real world, not just that you disagree: "confirmed with a torque wrench on three flange bolts, all held" beats "lowering this, feels fine now."</p>
+  </section>
+
+  <section>
+    <h3>Common findings, in order of frequency</h3>
+    <ol>
+      <li>A control in the plan with no FMEA row behind it, or a high-risk row with no control</li>
+      <li>Actions closed by improving detection alone</li>
+      <li>Severity lowered because an inspection was added</li>
+      <li>Failure modes written as part names or purchasing decisions</li>
+      <li>Reaction plan missing, vague, or with no containment scope</li>
+      <li>Document not updated after a real failure or a process change</li>
+    </ol>
+  </section>
+</section>
+
 <section class="comments" id="comments">
   <h2>Shane know's I'm a moron so input comments here</h2>
   <p>Banked to this browser — say what's wrong, what's missing, or what should change.</p>
@@ -372,10 +481,11 @@ table.sest td.status-fail{color:var(--hi);font-weight:600}
   and a detection-only improvement is flagged rather than allowed to close a row. Action Priority from the
   AIAG-VDA 2019 handbook is still shown small under each RPN for reference; it is a simplified form of the
   published table. Suppliers shipping under IATF 16949 are held to AP, so expect it on anything they send you.
-  Blank S/O/D means you haven't ranked it yet. Edits save automatically to this browser
-  (localStorage) and reload with the page — they do not sync anywhere else, so export JSON
-  for a portable copy or before switching browsers. Reset to defaults clears saved edits and
-  restores the built-in rows.
+  Blank S/O/D means you haven't ranked it yet. Editing a score requires a written reason before
+  it saves, and every accepted change is kept in that row's permanent change history. Saved data
+  lives in this browser (localStorage) and reloads with the page — it does not sync anywhere else,
+  so export JSON for a portable copy or before switching browsers. Reset to defaults clears saved
+  edits and change history and restores the built-in rows.
 </p>
 
 </div>
@@ -613,11 +723,11 @@ function needsAction(S,O,D){
 }
 
 /* Rule 2 — you cannot close a row by improving detection. Capture the
-   original S/O/D at load, then warn if D drops while S and O sit still. */
-ROWS.forEach(r=>{ r._base={S:r.S,O:r.O,D:r.D}; });
+   last-saved S/O/D, then warn if D drops while S and O sit still. */
+ROWS.forEach(r=>{ r._synced={S:r.S,O:r.O,D:r.D}; });
 
 function flagDetectionClose(row,r){
-  const b=r._base;
+  const b=r._synced;
   let el=row.querySelector(".det-note");
   const cheated = b.D && r.D && r.D < b.D && r.S===b.S && r.O===b.O;
   if(cheated){
@@ -640,6 +750,42 @@ function f(k,v){
 
 function esc(s){
   return String(s).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+}
+
+function historyEntryHtml(h){
+  return `<div class="chg-entry">
+    <div class="chg-entry-meta">${esc(new Date(h.ts).toLocaleString())} — S ${h.from.S??"–"}→${h.to.S??"–"}, O ${h.from.O??"–"}→${h.to.O??"–"}, D ${h.from.D??"–"}→${h.to.D??"–"}</div>
+    <div class="chg-entry-reason">${esc(h.reason)}</div>
+  </div>`;
+}
+function historyHtml(r){
+  if(!r.history||!r.history.length) return "";
+  return `<div class="chg-history"><div class="chg-history-title">Change history</div>${[...r.history].reverse().map(historyEntryHtml).join("")}</div>`;
+}
+function refreshChgHistory(row,r){
+  const body=row.querySelector(".chg");
+  let hist=row.querySelector(".chg-history");
+  if(!r.history||!r.history.length){
+    if(hist) hist.remove();
+    return;
+  }
+  const html=`<div class="chg-history-title">Change history</div>${[...r.history].reverse().map(historyEntryHtml).join("")}`;
+  if(!hist){
+    hist=document.createElement("div");
+    hist.className="chg-history";
+    body.appendChild(hist);
+  }
+  hist.innerHTML=html;
+}
+function updateChangeGate(row,r){
+  const synced=r._synced||{S:r.S,O:r.O,D:r.D};
+  const dirty=r.S!==synced.S||r.O!==synced.O||r.D!==synced.D;
+  const saveBtn=row.querySelector(".chg-save");
+  const reasonEl=row.querySelector(".chg-reason");
+  const reason=reasonEl?reasonEl.value.trim():"";
+  if(saveBtn) saveBtn.disabled=!(dirty&&reason);
+  const sod=row.querySelector(".sod");
+  if(sod) sod.classList.toggle("dirty",dirty);
 }
 
 function render(){
@@ -672,6 +818,15 @@ function render(){
           <label><div class="k">Detection</div><input type="number" min="1" max="10" value="${r.D??""}" data-i="${i}" data-k="D" placeholder="–"></label>
         </div>
         ${gate?`<div class="gate-note"><b>Severity gate — action required</b>${gate}</div>`:""}
+        <div class="chg">
+          <label class="chg-label" for="chg-reason-${i}">Reason for change <span class="req">(required to save an edited score)</span></label>
+          <textarea class="chg-reason" id="chg-reason-${i}" data-i="${i}" placeholder="What did you observe or confirm that changes this score?"></textarea>
+          <div class="chg-row">
+            <button type="button" class="chg-save" data-i="${i}" disabled>Save change</button>
+            <span class="chg-hint" hidden>Enter a reason before saving.</span>
+          </div>
+          ${historyHtml(r)}
+        </div>
         ${f("Cause — the mechanism, not the purchase decision",r.cause)}
         ${f("Prevention control (design)",r.prev)}
         ${f("Detection control",r.det)}
@@ -713,7 +868,7 @@ function render(){
 function audit(){
   const broken=ROWS.filter(r=>needsAction(r.S,r.O,r.D)&&!(r.ch&&r.method&&r.rx));
   const gates=ROWS.filter(r=>gated(r.S,r.O,r.D));
-  const cheats=ROWS.filter(r=>r._base.D&&r.D&&r.D<r._base.D&&r.S===r._base.S&&r.O===r._base.O);
+  const cheats=ROWS.filter(r=>r._synced.D&&r.D&&r.D<r._synced.D&&r.S===r._synced.S&&r.O===r._synced.O);
   const unranked=ROWS.filter(r=>rpn(r.S,r.O,r.D)===null);
   const box=$("#audit");
   if(!broken.length&&!gates.length&&!cheats.length&&!unranked.length){
@@ -897,12 +1052,44 @@ document.addEventListener("click",e=>{
     renderComments();
     return;
   }
+  const chgSave=e.target.closest(".chg-save");
+  if(chgSave){
+    const i=Number(chgSave.dataset.i);
+    const r=ROWS[i];
+    const row=chgSave.closest(".row");
+    const reasonEl=row.querySelector(".chg-reason");
+    const reason=reasonEl.value.trim();
+    const synced=r._synced||{S:r.S,O:r.O,D:r.D};
+    const dirty=r.S!==synced.S||r.O!==synced.O||r.D!==synced.D;
+    if(!dirty) return;
+    if(!reason){
+      row.querySelector(".chg-hint").hidden=false;
+      return;
+    }
+    const entry={ts:Date.now(), reason, from:{...synced}, to:{S:r.S,O:r.O,D:r.D}};
+    r.history=[...(r.history||[]), entry];
+    r._synced={S:r.S,O:r.O,D:r.D};
+    saveRows();
+    reasonEl.value="";
+    row.querySelector(".chg-hint").hidden=true;
+    row.querySelector(".sod").classList.remove("dirty");
+    chgSave.disabled=true;
+    refreshChgHistory(row,r);
+    return;
+  }
 });
 document.addEventListener("input",e=>{
   const note=e.target.closest(".chk-note");
   if(note){
     const ch=note.dataset.ch;
     DRAFT[ch]={...(DRAFT[ch]||{}),note:note.value};
+    return;
+  }
+  const reasonEl=e.target.closest(".chg-reason");
+  if(reasonEl){
+    const i=Number(reasonEl.dataset.i);
+    const row=reasonEl.closest(".row");
+    updateChangeGate(row,ROWS[i]);
     return;
   }
 });
@@ -960,7 +1147,7 @@ document.addEventListener("input",e=>{
   } else if(note){ note.remove(); }
   if(inp.dataset.k==="D") flagDetectionClose(row,r);
   audit();
-  saveRows();
+  updateChangeGate(row,r);
 });
 $("#f-hi").onclick=e=>{hiOnly=!hiOnly;e.currentTarget.setAttribute("aria-pressed",hiOnly);render()};
 $("#expand").onclick=e=>{
@@ -970,12 +1157,14 @@ $("#v-fmea").onclick=()=>setView("fmea");
 $("#v-cp").onclick=()=>setView("cp");
 $("#v-chk").onclick=()=>setView("chk");
 $("#v-log").onclick=()=>setView("log");
+$("#v-ref").onclick=()=>setView("ref");
 function setView(v){
   view=v;
   $("#v-fmea").setAttribute("aria-pressed",v==="fmea");
   $("#v-cp").setAttribute("aria-pressed",v==="cp");
   $("#v-chk").setAttribute("aria-pressed",v==="chk");
   $("#v-log").setAttribute("aria-pressed",v==="log");
+  $("#v-ref").setAttribute("aria-pressed",v==="ref");
   $("#fmea").classList.toggle("hide",v!=="fmea");
   $("#audit").classList.toggle("hide",v!=="fmea");
   $("#f-hi").classList.toggle("hide",v!=="fmea");
@@ -984,6 +1173,7 @@ function setView(v){
   $("#cplan").classList.toggle("hide",v!=="cp");
   $("#checklist").classList.toggle("hide",v!=="chk");
   $("#seclog").classList.toggle("hide",v!=="log");
+  $("#refguide").classList.toggle("hide",v!=="ref");
   if(v==="cp") controlPlan();
   if(v==="chk") checklist();
   if(v==="log") sessionLog();
@@ -994,10 +1184,10 @@ $("#sort").onclick=e=>{
   render();
 };
 $("#reset").onclick=()=>{
-  if(!confirm("Reset to defaults? This clears every saved edit in this browser and cannot be undone.")) return;
+  if(!confirm("Reset to defaults? This clears every saved edit and change history in this browser and cannot be undone.")) return;
   ROWS.length=0;
   ORIGINAL_ROWS.forEach(r=>ROWS.push(JSON.parse(JSON.stringify(r))));
-  ROWS.forEach(r=>{ r._base={S:r.S,O:r.O,D:r.D}; });
+  ROWS.forEach(r=>{ r._synced={S:r.S,O:r.O,D:r.D}; });
   localStorage.removeItem(STORAGE_KEY);
   render();
 };
