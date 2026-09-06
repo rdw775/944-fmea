@@ -760,10 +760,26 @@ function isDirty(r){
 function pendingChanges(){
   return ROWS.map((r,i)=>({i,r})).filter(({r})=>isDirty(r));
 }
+let submitConfirmTimer=null;
+function showSubmitConfirmation(text){
+  const info=$("#submitAllInfo");
+  if(!info) return;
+  info.innerHTML=text;
+  info.dataset.confirming="1";
+  clearTimeout(submitConfirmTimer);
+  submitConfirmTimer=setTimeout(()=>{
+    delete info.dataset.confirming;
+    updateSubmitAll();
+  }, 5000);
+}
 function updateSubmitAll(){
   const bar=$("#submitAll");
   if(!bar) return;
   const info=$("#submitAllInfo"), btn=$("#submitAllBtn");
+  // A just-shown confirmation stays visible (and immune to snapshot echoes
+  // or other re-renders re-running this function) until its own timeout,
+  // or until a genuinely new edit explicitly clears it.
+  if(info.dataset.confirming) return;
   const pending=pendingChanges();
   if(!pending.length){
     info.innerHTML="No pending score changes.";
@@ -782,6 +798,8 @@ function updateSubmitAll(){
 function updateChangeGate(row,r){
   const sod=row.querySelector(".sod");
   if(sod) sod.classList.toggle("dirty",isDirty(r));
+  const info=$("#submitAllInfo");
+  if(info) delete info.dataset.confirming;
   updateSubmitAll();
 }
 
@@ -1080,8 +1098,7 @@ document.addEventListener("click",e=>{
       });
       CHANGE_DRAFT={};
       render();
-      const info=$("#submitAllInfo");
-      info.innerHTML=`<b>${pending.length} change${pending.length>1?"s":""} submitted</b>Logged to change history.`;
+      showSubmitConfirmation(`<b>${pending.length} change${pending.length>1?"s":""} submitted</b>Logged to change history.`);
     }).catch(()=>{
       $("#submitAllBtn").disabled=false;
       alert("Save failed — check your connection and try again.");
@@ -1100,6 +1117,8 @@ document.addEventListener("input",e=>{
   if(reasonEl){
     const i=Number(reasonEl.dataset.i);
     CHANGE_DRAFT[i]=reasonEl.value;
+    const info=$("#submitAllInfo");
+    if(info) delete info.dataset.confirming;
     updateSubmitAll();
     return;
   }

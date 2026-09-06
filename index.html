@@ -791,10 +791,23 @@ function isDirty(r){
 function pendingChanges(){
   return ROWS.map((r,i)=>({i,r})).filter(({r})=>isDirty(r));
 }
+let submitConfirmTimer=null;
+function showSubmitConfirmation(text){
+  const info=$("#submitAllInfo");
+  if(!info) return;
+  info.innerHTML=text;
+  info.dataset.confirming="1";
+  clearTimeout(submitConfirmTimer);
+  submitConfirmTimer=setTimeout(()=>{
+    delete info.dataset.confirming;
+    updateSubmitAll();
+  }, 5000);
+}
 function updateSubmitAll(){
   const bar=$("#submitAll");
   if(!bar) return;
   const info=$("#submitAllInfo"), btn=$("#submitAllBtn");
+  if(info.dataset.confirming) return;
   const pending=pendingChanges();
   if(!pending.length){
     info.innerHTML="No pending score changes.";
@@ -813,6 +826,8 @@ function updateSubmitAll(){
 function updateChangeGate(row,r){
   const sod=row.querySelector(".sod");
   if(sod) sod.classList.toggle("dirty",isDirty(r));
+  const info=$("#submitAllInfo");
+  if(info) delete info.dataset.confirming;
   updateSubmitAll();
 }
 
@@ -1091,8 +1106,7 @@ document.addEventListener("click",e=>{
     CHANGE_DRAFT={};
     saveRows();
     render();
-    const info=$("#submitAllInfo");
-    info.innerHTML=`<b>${pending.length} change${pending.length>1?"s":""} submitted</b>Logged to change history.`;
+    showSubmitConfirmation(`<b>${pending.length} change${pending.length>1?"s":""} submitted</b>Logged to change history.`);
     return;
   }
 });
@@ -1107,6 +1121,8 @@ document.addEventListener("input",e=>{
   if(reasonEl){
     const i=Number(reasonEl.dataset.i);
     CHANGE_DRAFT[i]=reasonEl.value;
+    const info=$("#submitAllInfo");
+    if(info) delete info.dataset.confirming;
     updateSubmitAll();
     return;
   }
