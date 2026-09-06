@@ -1,0 +1,730 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>944 Track Car — FMEA &amp; Control Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Archivo+Narrow:wght@500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:light only;
+  forced-color-adjust:none;
+  --ink:#16181c;
+  --ink-2:#4b525c;
+  --ink-3:#7b838f;
+  --rule:#c8ccd2;
+  --rule-hard:#16181c;
+  --paper:#f2f3f0;
+  --card:#ffffff;
+  --hi:#b3121a;      /* signal red  */
+  --md:#c07600;      /* signal amber */
+  --lo:#2f6b3a;      /* signal green */
+  --tape:#1d4ed8;
+}
+*{box-sizing:border-box}
+html{
+  -webkit-text-size-adjust:100%;
+  background:#f2f3f0;
+  color-scheme:light only;
+}
+body{
+  margin:0;
+  min-height:100%;
+  background:#f2f3f0;
+  color:#16181c;
+  font-family:"Archivo",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  font-size:15px;
+  line-height:1.5;
+}
+.wrap{max-width:1180px;margin:0 auto;padding:0 18px 90px;background:#f2f3f0;min-height:100vh}
+
+/* ---------- masthead: scrutineering sheet ---------- */
+header.sheet{
+  border-bottom:3px solid var(--rule-hard);
+  padding:26px 0 14px;
+  margin-bottom:22px;
+}
+.sheet h1{
+  color:#16181c;
+  font-family:"Archivo Narrow","Archivo",sans-serif;
+  font-weight:700;
+  font-size:clamp(30px,7vw,50px);
+  line-height:.98;
+  letter-spacing:-.015em;
+  margin:0 0 14px;
+}
+.sheet h1 span{display:block;color:var(--ink-3);font-weight:600;font-size:.44em;letter-spacing:.01em;margin-top:8px}
+.spec-row{
+  display:flex;flex-wrap:wrap;gap:0;
+  border-top:1px solid var(--rule);
+}
+.spec{
+  flex:1 1 150px;
+  padding:9px 14px 9px 0;
+  border-right:1px solid var(--rule);
+}
+.spec:last-child{border-right:0}
+.spec dt{font-size:11.5px;color:var(--ink-3);margin:0 0 2px}
+.spec dd{margin:0;font-weight:600;font-size:15px}
+.spec dd.target{font-family:"IBM Plex Mono",ui-monospace,monospace;font-weight:600}
+
+/* ---------- chain explainer ---------- */
+.chain{
+  display:flex;align-items:stretch;flex-wrap:wrap;gap:0;
+  border:1px solid var(--rule);background:var(--card);
+  margin:0 0 26px;
+}
+.chain .link{flex:1 1 190px;padding:13px 16px;border-right:1px solid var(--rule)}
+.chain .link:last-child{border-right:0}
+.chain b{display:block;font-family:"Archivo Narrow",sans-serif;font-size:16px;margin-bottom:3px}
+.chain p{margin:0;font-size:13px;color:var(--ink-2);line-height:1.42}
+
+/* ---------- controls bar ---------- */
+.bar{
+  display:flex;flex-wrap:wrap;gap:8px;align-items:center;
+  padding-bottom:14px;margin-bottom:18px;border-bottom:1px solid var(--rule);
+}
+button{
+  font:inherit;font-size:13.5px;font-weight:600;
+  background:var(--card);color:var(--ink);
+  border:1px solid var(--rule-hard);border-radius:0;
+  padding:7px 13px;cursor:pointer;
+}
+button:hover{background:var(--ink);color:var(--paper)}
+button:focus-visible{outline:3px solid var(--tape);outline-offset:2px}
+button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.bar .sep{flex:1}
+.bar .count{font-size:13px;color:var(--ink-2)}
+
+/* ---------- audit banner ---------- */
+.audit{border:2px solid var(--hi);background:#fff;padding:13px 16px;margin-bottom:20px}
+.audit.clean{border-color:var(--lo)}
+.audit b{
+  color:#16181c;font-family:"Archivo Narrow",sans-serif;font-size:16px;display:block;margin-bottom:3px}
+.audit ul{margin:6px 0 0;padding-left:19px;font-size:13.5px;color:var(--ink-2)}
+.audit p{margin:0;font-size:13.5px;color:var(--ink-2)}
+
+/* ---------- system groups ---------- */
+.sys{margin-bottom:30px}
+.sys > h2{
+  color:#16181c;
+  font-family:"Archivo Narrow",sans-serif;font-size:20px;font-weight:700;
+  margin:0 0 10px;padding-bottom:6px;border-bottom:2px solid var(--rule-hard);
+}
+
+/* ---------- row card ---------- */
+.row{
+  background:var(--card);border:1px solid var(--rule);
+  border-left:6px solid var(--rule);
+  margin-bottom:11px;
+}
+.row[data-ap="H"]{border-left-color:var(--hi)}
+.row[data-ap="M"]{border-left-color:var(--md)}
+.row[data-ap="L"]{border-left-color:var(--lo)}
+.row[data-ap="?"]{border-left-color:var(--rule);border-left-style:dashed}
+.row.todo{background:repeating-linear-gradient(135deg,#fff,#fff 11px,#fbfbf8 11px,#fbfbf8 22px)}
+
+.rhead{
+  display:flex;gap:12px;align-items:flex-start;
+  padding:12px 14px;cursor:pointer;width:100%;text-align:left;
+  background:none;border:0;font:inherit;
+}
+.rhead:hover{background:#f7f8f5;color:inherit}
+.rhead .fm{flex:1;min-width:0}
+.rhead .fm b{display:block;font-weight:600;font-size:15.5px;line-height:1.3}
+.rhead .fm em{display:block;font-style:normal;font-size:13px;color:var(--ink-2);margin-top:3px}
+.ap{
+  font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:12px;
+  padding:3px 8px;border:1.5px solid;white-space:nowrap;align-self:center;
+}
+.ap[data-v="H"]{color:var(--hi);border-color:var(--hi)}
+.ap[data-v="M"]{color:var(--md);border-color:var(--md)}
+.ap[data-v="L"]{color:var(--lo);border-color:var(--lo)}
+.ap[data-v="?"]{color:var(--ink-3);border-color:var(--rule)}
+.rank{
+  font-family:"IBM Plex Mono",monospace;font-size:13px;font-weight:600;
+  color:var(--ink-3);align-self:center;min-width:26px;text-align:right;flex:none;
+}
+.sys-tag{
+  display:inline-block;font-family:"Archivo Narrow",sans-serif;font-size:11px;
+  letter-spacing:.03em;text-transform:uppercase;color:var(--ink-3);
+  border:1px solid var(--rule);padding:1px 6px;margin-bottom:5px;
+}
+.badges{display:flex;flex-direction:column;gap:4px;align-self:center;align-items:stretch}
+.rpn{
+  font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:16px;
+  padding:5px 10px;border:2px solid var(--ink);color:var(--ink);
+  white-space:nowrap;text-align:center;
+}
+.rpn.gated{border-color:var(--hi);color:var(--hi)}
+.ap{
+  font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:11px;
+  padding:2px 8px;border:1px solid;white-space:nowrap;text-align:center;opacity:.65;
+}
+.gate-note{
+  margin-top:10px;border-left:4px solid var(--hi);background:#fff6f6;
+  padding:9px 12px;font-size:13.5px;line-height:1.45;color:var(--ink-2);
+}
+.gate-note b{color:var(--hi);display:block;font-family:"Archivo Narrow",sans-serif;font-size:14.5px;margin-bottom:2px}
+.rules{
+  border:1px solid var(--rule-hard);background:var(--card);padding:13px 16px;margin-bottom:20px;
+}
+.rules h3{
+  color:#16181c;font-family:"Archivo Narrow",sans-serif;margin:0 0 7px;font-size:16px}
+.rules ol{margin:0;padding-left:19px;font-size:13.5px;color:var(--ink-2);line-height:1.5}
+.rules li{margin-bottom:4px}
+
+.rbody{display:none;padding:0 14px 15px;border-top:1px dashed var(--rule)}
+.row.open .rbody{display:block}
+.field{padding:9px 0;border-bottom:1px dotted var(--rule)}
+.field:last-child{border-bottom:0}
+.field .k{font-size:11.5px;color:var(--ink-3);margin-bottom:2px}
+.field .v{font-size:14px;line-height:1.45}
+.field .v.empty{color:var(--ink-3);font-style:italic}
+
+.sod{display:flex;gap:10px;padding:11px 0;border-bottom:1px dotted var(--rule)}
+.sod label{flex:1}
+.sod .k{font-size:11.5px;color:var(--ink-3);margin-bottom:3px}
+.sod input{
+  width:100%;font-family:"IBM Plex Mono",monospace;font-size:17px;font-weight:600;
+  padding:6px 8px;border:1px solid var(--rule-hard);border-radius:0;background:#fff;color:var(--ink);
+}
+.sod input:focus-visible{outline:3px solid var(--tape);outline-offset:1px}
+
+.cp{margin-top:12px;border:1px solid var(--rule-hard);padding:11px 13px;background:#fbfbf8}
+.cp h4{font-family:"Archivo Narrow",sans-serif;margin:0 0 7px;font-size:15px}
+.cp .field{border-color:#e3e5e0}
+.cp.missing{border-color:var(--hi);background:#fff6f6}
+.cp.missing h4{color:var(--hi)}
+
+/* ---------- checklist view ---------- */
+.chk{background:var(--card);border:1px solid var(--rule-hard);padding:16px 18px}
+.chk h2{
+  color:#16181c;font-family:"Archivo Narrow",sans-serif;margin:0 0 4px;font-size:22px}
+.chk > p{margin:0 0 14px;font-size:13.5px;color:var(--ink-2)}
+.chk-item{display:flex;gap:11px;padding:11px 0;border-top:1px solid var(--rule)}
+.chk-box{width:20px;height:20px;border:2px solid var(--rule-hard);flex:none;margin-top:2px}
+.chk-item .t b{display:block;font-size:15px}
+.chk-item .t span{display:block;font-size:13px;color:var(--ink-2);margin-top:2px}
+.chk-item .t .rx{color:var(--hi);font-weight:600}
+
+.cpwrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--rule-hard)}
+table.cpt{border-collapse:collapse;width:100%;min-width:900px;font-size:13px;background:var(--card)}
+table.cpt th{
+  font-family:"Archivo Narrow",sans-serif;font-size:12px;text-align:left;
+  background:var(--ink);color:var(--paper);padding:8px 10px;font-weight:600;
+  position:sticky;top:0;
+}
+table.cpt td{padding:9px 10px;border-top:1px solid var(--rule);vertical-align:top;line-height:1.4}
+table.cpt tr.sev-hi td:first-child{border-left:5px solid var(--hi)}
+table.cpt td.n{font-family:"IBM Plex Mono",monospace;font-weight:600;text-align:right;white-space:nowrap}
+table.cpt td.rx{color:var(--hi)}
+table.cpt td.gap{color:var(--hi);font-style:italic;font-weight:600}
+table.cpt .sc{
+  display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:10px;
+  border:1px solid var(--hi);color:var(--hi);padding:1px 4px;margin-top:3px;
+}
+.hide{display:none}
+.foot{margin-top:26px;font-size:12.5px;color:var(--ink-3);line-height:1.55;border-top:1px solid var(--rule);padding-top:12px}
+
+@media print{
+  body{background:#fff}
+  .bar,.chain,.audit{display:none}
+  .rbody{display:block}
+  .row{break-inside:avoid;border-left-width:3px}
+}
+@media (prefers-color-scheme:dark){
+  html,body,.wrap{background:#f2f3f0;color:#16181c}
+  .sheet h1,.sys > h2,.rules h3,.chk h2{color:#16181c}
+  .row,.chain,.rules,.chk,table.cpt{background:#ffffff}
+  .audit{background:#ffffff}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="sheet">
+  <h1>944 Track Car<span>Failure modes, effects &amp; control plan</span></h1>
+  <dl class="spec-row">
+    <div class="spec"><dt>Chassis</dt><dd>944 Turbo, LS swap</dd></div>
+    <div class="spec"><dt>Front end</dt><dd>Rolex Cup</dd></div>
+    <div class="spec"><dt>Target</dt><dd class="target">1:35.0 — Laguna Seca</dd></div>
+    <div class="spec"><dt>Pass condition</dt><dd>Car and driver home intact</dd></div>
+  </dl>
+</header>
+
+<div class="chain">
+  <div class="link"><b>Function</b><p>What the system has to do to get you to 1:35 and back.</p></div>
+  <div class="link"><b>Failure mode</b><p>How it stops doing that. Not the part name — the mechanism.</p></div>
+  <div class="link"><b>Effect &amp; severity</b><p>Worst credible outcome. Rank the outcome, not the one luck gave you.</p></div>
+  <div class="link"><b>Control</b><p>What you check, to what spec, how often, and what you do when it fails.</p></div>
+</div>
+
+<div class="bar">
+  <button id="v-fmea" aria-pressed="true">FMEA</button>
+  <button id="v-cp" aria-pressed="false">Control plan</button>
+  <button id="v-chk" aria-pressed="false">Pre-grid checklist</button>
+  <button id="f-hi" aria-pressed="false">Needs action only</button>
+  <button id="sort">Group by system</button>
+  <button id="expand">Expand all</button>
+  <span class="sep"></span>
+  <span class="count" id="count"></span>
+  <button id="print">Print</button>
+  <button id="export">Export JSON</button>
+</div>
+
+<div class="rules">
+  <h3>Working rules</h3>
+  <ol>
+    <li>Rank by RPN — severity × occurrence × detection. Anything at or above 100 gets an action.</li>
+    <li>Severity gate: any severity 9 or 10 gets an action regardless of RPN. Multiplication hides these.</li>
+    <li>A detection improvement never closes a row. Only a lower severity or lower occurrence does.</li>
+  </ol>
+</div>
+
+<div class="audit" id="audit"></div>
+
+<main id="fmea"></main>
+
+<section id="cplan" class="chk hide"></section>
+
+<section id="checklist" class="chk hide"></section>
+
+<p class="foot">
+  Ranking runs on RPN — severity × occurrence × detection — with an action threshold of 100.
+  The two working rules above patch the holes multiplication leaves: a severity gate catches rows RPN buries,
+  and a detection-only improvement is flagged rather than allowed to close a row. Action Priority from the
+  AIAG-VDA 2019 handbook is still shown small under each RPN for reference; it is a simplified form of the
+  published table. Suppliers shipping under IATF 16949 are held to AP, so expect it on anything they send you.
+  Blank S/O/D means you haven't ranked it yet. Nothing is saved when you close the page — export before you leave.
+</p>
+
+</div>
+<script>
+const ROWS = [
+ {
+  sys:"Drivetrain", fn:"Transmit torque to the left rear wheel through suspension travel and steering-free articulation",
+  fm:"Rear CV joint loses internal geometry — balls brinell the races, cage cracks, joint will not reassemble",
+  eff:"Loss of drive. Joint can bind or separate; a separated shaft flails into brake lines, fuel lines or bodywork",
+  S:9,
+  cause:"Operating angle at lowered ride height exceeds joint rating; grease overheats and sheds; unknown-supplier joint with no cert",
+  O:6, D:5,
+  prev:"Known-brand joint of adequate rating. Measure static CV angle at ride height and compare to the joint's rated angle before install",
+  det:"Boot condition and grease colour checked each session — a split boot precedes the failure by a long margin",
+  ch:"CV boot integrity and grease condition", spec:"Boot uncut and unsplit; grease light-coloured, not dark or gritty",
+  method:"Visual, wheel off or through the wheel", samp:"100%, every session",
+  rx:"Split boot or dark gritty grease → do not grid. Pull the joint, inspect races for indentation, repack or replace"
+ },
+ {
+  sys:"Drivetrain", fn:"Maintain clamp load at the axle-to-hub flange joint",
+  fm:"Flange bolt joint loses clamp load",
+  eff:"Micro-motion at the joint face → fretting at the bolt holes → fatigue crack that presents later as a 'snapped' shaft",
+  S:9,
+  cause:"Joint separated at the flange instead of dropping the trailing arm, so it is opened and re-closed often. No re-torque interval, no thread retention, dirty joint faces",
+  O:5, D:4,
+  prev:"New hardware or fresh threadlocker each assembly. Clean and dry both faces. Torque to spec with a calibrated wrench",
+  det:"Paint witness stripe across each bolt head onto the flange — a five-second visual on a joint you can't easily reach",
+  ch:"CV flange bolt torque", spec:"Manufacturer torque spec for the flange hardware",
+  method:"Calibrated torque wrench at assembly; paint stripe check thereafter", samp:"100% at assembly, visual every session",
+  rx:"Any broken stripe → pull the wheel, inspect the joint and bolt holes for fretting, replace hardware and re-torque before grid"
+ },
+ {
+  sys:"Drivetrain", fn:"Carry peak driveline torque including transient shock loads",
+  fm:"Axle shaft fractures",
+  eff:"Immediate loss of drive; shaft end flails. Under power on corner exit this can take out a brake line or induce sudden yaw",
+  S:9,
+  cause:"Shock loading — inside rear unloads over a curb and re-plants, wheel hop under trail braking — multiplies engine torque well past the 944's original ~217 hp design case",
+  O:4, D:3,
+  prev:"Upgraded shaft rated for the LS torque case, or a deliberately chosen weak link you can replace cheaply",
+  det:"Fracture face reading after any failure: beach marks = fatigue, flat and crystalline = brittle overload, cup-and-cone with twist = ductile overload",
+  ch:"Shaft rating vs. applied torque case", spec:"Shaft rated above peak shock load, not above peak flywheel torque",
+  method:"Documented at build; visual inspection for twist or surface damage at each corner service", samp:"Every corner service",
+  rx:"Visible twist, galling or spline damage → replace both sides, keep the failed part and read the fracture face before binning it"
+ },
+ {
+  sys:"Engine", fn:"Maintain oil pressure through sustained lateral load",
+  fm:"Oil pickup uncovered under sustained lateral G",
+  eff:"Bearing starvation → spun bearing → engine out and oil on track. At Laguna this is the Corkscrew and everyone behind you",
+  S:10,
+  cause:"Stock LS pan baffling designed for straight-line duty. Turn 6 is a long sustained left; the Corkscrew unloads the car completely",
+  O:6, D:6,
+  prev:"Baffled or kickout pan, windage tray, or accusump. This is a design control — fix it once, in the build",
+  det:"Logged oil pressure trace reviewed after every session. The dash light tells you the motor is already gone",
+  ch:"Oil level, cold, on level ground", spec:"Your pan's measured full mark — not the factory dipstick",
+  method:"Dipstick plus review of last session's logged pressure trace", samp:"100%, every session",
+  rx:"Any pressure dip in the trace → no-go. Do not grid until the cause is found"
+ },
+ {
+  sys:"Brakes", fn:"Contain hydraulic pressure from the dual master to each corner without loss",
+  fm:"Hard line flare joint leaks — seat does not seal against the fitting",
+  eff:"Progressive fluid loss, then a long or bottomed pedal. Worst case is the end of the front straight into Turn 2, with a circuit already down and no reserve travel",
+  S:10,
+  cause:"Flare profile does not match the seat. A 944's native lines are metric ISO/bubble flare; most US masters take SAE 45° inverted double flare. Mixing the two never seals at any torque. Second candidate: a single flare where a double is required — it cracks. Third: cheap clamp-style flaring tool producing off-centre or split flares",
+  O:8, D:2,
+  prev:"Confirm the port standard on the master before cutting a single line, then flare to match. Double flare for SAE 45°, never single. Use a hydraulic or turret-style flaring tool, not a clamp-and-cone kit. Adapters where standards genuinely change, not a torque wrench",
+  det:"Pressure hold test with a pedal depressor and dry paper towel wrapped at each joint. Visual alone misses a weep",
+  ch:"Every flare joint — seal integrity under pressure (special characteristic — safety)",
+  spec:"Zero loss. Pedal holds firm under sustained load, no dampness at any joint",
+  method:"Pedal depressor at working pressure held 15+ minutes, paper towel witness at each fitting; reservoir level marked and re-checked",
+  samp:"100% of joints at build, every joint visually each session",
+  rx:"Any dampness → car does not move. Do not re-torque to chase a leak — an over-torqued seat is deformed permanently. Cut the flare off, verify the profile against the port, re-flare, re-test"
+ },
+ {
+  sys:"Cooling", fn:"Reject enough heat to hold coolant and oil temperature over a full 20-minute session",
+  fm:"Coolant temperature climbs past limit and keeps climbing — no plateau",
+  eff:"Detonation, then head gasket or worse. On an untuned LS this arrives faster than on a stock engine, and the first sign may be damage rather than a gauge reading",
+  S:9,
+  cause:"LS heat rejection exceeds what the 944 core and duct path were sized for. Usual mechanisms: air not actually passing through the core (recirculation around an unsealed shroud), trapped air from an incomplete fill on a system with high points, or fan control that never commands on at track duty cycle",
+  O:7, D:4,
+  prev:"Seal the perimeter so air must pass through the core, not around it. Bleed to a documented procedure. Set fan-on threshold for track use, not street",
+  det:"Log coolant in and out plus oil temp for a full session. The number that matters is the delta across the radiator and whether temperature plateaus or keeps climbing",
+  ch:"Coolant temperature rise across a session, and delta across the radiator",
+  spec:"Temperature reaches a plateau and holds. A steady climb with no plateau fails regardless of the peak number",
+  method:"Logged inlet and outlet temps over a full 20-minute session at pace, reviewed after",
+  samp:"Every session until three consecutive sessions plateau, then every event",
+  rx:"No plateau → session over, cool down on track before pitting. Do not validate a cooling change on a short session — a system that fails at minute 18 passes a 6-minute test"
+ },
+ {
+  sys:"Fuel", fn:"Report fuel pressure to the ECU so a drop can be acted on before damage",
+  fm:"Fuel pressure not monitored — no signal to the Haltech",
+  eff:"A pressure drop goes undetected. On an untuned LS that is lean-out under sustained load, detonation, and a melted piston. With nothing logged, the post-mortem cannot separate a fuel problem from a tune problem",
+  S:9, O:6, D:8,
+  cause:"Pressure is read only on the mechanical gauge at the Aeromotive regulator. No sensor fitted, or fitted but not wired to an analog input",
+  prev:"The sensor alone is not the fix — configure a low-pressure safety cut in the Haltech so the ECU pulls timing or cuts before damage. That converts a detection-only control into real prevention",
+  det:"Logged pressure trace reviewed after every session. A mechanical gauge you cannot see at speed is barely a control, which is what the detection score reflects",
+  ch:"Fuel pressure, logged, across the full session",
+  spec:"Holds regulator target under sustained load; no dips under lateral G or braking",
+  method:"Pressure sensor on an ECU analog input, logged, with a configured low-pressure limit",
+  samp:"Continuous logging, reviewed 100% of sessions",
+  rx:"Any dip below limit → session over. Do not re-run until the cause is found — a repeat is a spun bearing away from an engine"
+ },
+ {
+  sys:"Fuel", fn:"Deliver fuel without interruption under sustained lateral and braking load",
+  fm:"Pump uncovers — starvation with a low tank",
+  eff:"Momentary lean event under load. Same damage path as above, and it arrives at the worst possible moment because it takes sustained cornering to trigger",
+  S:9, O:6, D:7,
+  cause:"No fuel level signal to the Haltech, so tank level is a guess. Stock pickup with no surge tank or baffle to keep the pump submerged under lateral load",
+  prev:"Surge tank or baffled pickup. Level sender wired to the ECU so remaining fuel is a number, not an estimate",
+  det:"Until a sender is fitted: fuel used per session logged by hand, with a hard minimum tank level rule",
+  ch:"Minimum tank level at grid",
+  spec:"Documented minimum — set above the level where the pickup uncovers under sustained G, not above empty",
+  method:"Measured fill and logged consumption per session; level sender once fitted",
+  samp:"100%, every session",
+  rx:"Below minimum → do not grid, add fuel. Never run a session down to reserve to save a splash of fuel"
+ },
+ {
+  sys:"Suspension", fn:"Maintain intended tire contact patch and consistent handling balance through the corner",
+  fm:"Suspension geometry not set to a defined spec",
+  eff:"Unpredictable balance under load. On a car being learned at pace, a snap you did not expect is a wall, not just a slow lap",
+  S:8, O:10, D:3,
+  cause:"Not aligned since the swap and suspension work. Underneath that: no target spec exists to align to, so 'aligned' has no definition yet",
+  prev:"Write a target sheet first — camber, toe, caster chosen for the tire and for Laguna. Set ride height before alignment or it gets done twice",
+  det:"Alignment measured on a rack at target ride height with driver weight or ballast in the seat",
+  ch:"Corner alignment — camber, toe, caster, and corner weights",
+  spec:"Documented target sheet. Not 'factory', not 'straight'",
+  method:"Alignment rack at target ride height, driver weight or ballast in seat",
+  samp:"After any suspension change, and after any off",
+  rx:"No defined spec → do not align yet, write the spec first. Out of spec → no track use until corrected"
+ },
+ {
+  sys:"Suspension", fn:"Provide known, repeatable grip so the car and the driver can be developed against a baseline",
+  fm:"Tire not selected — grip level and target geometry both unknown",
+  eff:"No baseline. Every change gets evaluated against a moving reference, so nothing learned this season carries forward",
+  S:7, O:10, D:2,
+  cause:"Tire choice not made. Camber target depends on tire construction more than on anything else, so the alignment spec cannot be written until this is settled",
+  prev:"Choose the tire before writing the alignment spec — this row blocks the row above it",
+  det:"Obvious on inspection; the detection score is low because nothing is hidden here",
+  ch:"Tire spec and pressures",
+  spec:"Selected compound and size, with hot pressure targets recorded",
+  method:"Documented at selection; hot pressures taken after each session",
+  samp:"Every session once running",
+  rx:"Wear pattern away from target → revisit camber before changing anything else"
+ },
+ {
+  sys:"Driver safety", fn:"Restrain the driver in an impact",
+  fm:"Harness webbing or mounting degrades",
+  eff:"", S:null, O:null, D:null,
+  cause:"", prev:"", det:"",
+  ch:"", spec:"", method:"", samp:"", rx:"", todo:true
+ }
+];
+
+/* Simplified AIAG-VDA Action Priority. Severity dominates; detection never rescues
+   a high-severity, high-occurrence row. Verify against the published table for audit use. */
+function ap(S,O,D){
+  if(!S||!O||!D) return "?";
+  if(S>=9){
+    if(O>=4) return "H";
+    if(O>=2) return D>=5?"H":"M";
+    return D>=7?"M":"L";
+  }
+  if(S>=7){
+    if(O>=6) return "H";
+    if(O>=4) return D>=5?"H":"M";
+    if(O>=2) return D>=7?"M":"L";
+    return "L";
+  }
+  if(S>=4){
+    if(O>=7) return D>=5?"H":"M";
+    if(O>=4) return D>=7?"M":"L";
+    return "L";
+  }
+  return O>=8&&D>=7?"M":"L";
+}
+
+function rpn(S,O,D){ return (!S||!O||!D) ? null : S*O*D; }
+
+const RPN_THRESHOLD = 100;
+
+/* Rule 1 — severity gate. Sev 9-10 gets an action regardless of RPN.
+   This is the one thing RPN's multiplication can hide. */
+function gated(S,O,D){
+  const n=rpn(S,O,D);
+  if(n===null) return null;
+  if(S>=9 && n<RPN_THRESHOLD){
+    return `RPN ${n} is under the ${RPN_THRESHOLD} threshold, but severity ${S} triggers the gate. This row needs an action anyway — multiplication is hiding a ${S===10?"catastrophic":"severe"} outcome behind low occurrence and good detection.`;
+  }
+  return null;
+}
+
+function needsAction(S,O,D){
+  const n=rpn(S,O,D);
+  if(n===null) return false;
+  return n>=RPN_THRESHOLD || S>=9;
+}
+
+/* Rule 2 — you cannot close a row by improving detection. Capture the
+   original S/O/D at load, then warn if D drops while S and O sit still. */
+ROWS.forEach(r=>{ r._base={S:r.S,O:r.O,D:r.D}; });
+
+function flagDetectionClose(row,r){
+  const b=r._base;
+  let el=row.querySelector(".det-note");
+  const cheated = b.D && r.D && r.D < b.D && r.S===b.S && r.O===b.O;
+  if(cheated){
+    const before=rpn(b.S,b.O,b.D), after=rpn(r.S,r.O,r.D);
+    if(!el){
+      el=document.createElement("div");
+      el.className="gate-note det-note";
+      row.querySelector(".sod").after(el);
+    }
+    el.innerHTML=`<b>Detection-only improvement — does not close the row</b>RPN fell from ${before} to ${after}, but severity and occurrence are unchanged. Nothing about the failure got less likely or less bad — you only got better at watching it happen. Log the improved detection, keep the action open.`;
+  } else if(el){ el.remove(); }
+}
+
+const $=s=>document.querySelector(s);
+let hiOnly=false, allOpen=false, view="fmea", byRpn=true;
+
+function f(k,v){
+  return `<div class="field"><div class="k">${k}</div><div class="v${v?"":" empty"}">${v||"Not filled in yet — this one is yours"}</div></div>`;
+}
+
+function render(){
+  const host=$("#fmea"); host.innerHTML="";
+  const visible=ROWS.filter(r=>!hiOnly||needsAction(r.S,r.O,r.D));
+  let shown=0;
+
+  const card=(r,rank)=>{
+    shown++;
+    const i=ROWS.indexOf(r), a=ap(r.S,r.O,r.D);
+    const n=rpn(r.S,r.O,r.D), gate=gated(r.S,r.O,r.D);
+    const hasControl=!!(r.ch&&r.method&&r.rx);
+    const el=document.createElement("article");
+    el.className="row"+(r.todo?" todo":"")+(allOpen?" open":"");
+    el.dataset.ap=a;
+    el.innerHTML=`
+      <button class="rhead" aria-expanded="${allOpen}">
+        ${rank?`<span class="rank">${rank}</span>`:""}
+        <span class="fm">${byRpn?`<span class="sys-tag">${r.sys}</span>`:""}<b>${r.fm}</b><em>${r.fn}</em></span>
+        <span class="badges">
+          <span class="rpn${gate?" gated":""}">RPN ${n??"–"}</span>
+          <span class="ap" data-v="${a}">AP ${a}</span>
+        </span>
+      </button>
+      <div class="rbody">
+        ${f("Effect — worst credible outcome",r.eff)}
+        <div class="sod">
+          <label><div class="k">Severity</div><input type="number" min="1" max="10" value="${r.S??""}" data-i="${i}" data-k="S" placeholder="–"></label>
+          <label><div class="k">Occurrence</div><input type="number" min="1" max="10" value="${r.O??""}" data-i="${i}" data-k="O" placeholder="–"></label>
+          <label><div class="k">Detection</div><input type="number" min="1" max="10" value="${r.D??""}" data-i="${i}" data-k="D" placeholder="–"></label>
+        </div>
+        ${gate?`<div class="gate-note"><b>Severity gate — action required</b>${gate}</div>`:""}
+        ${f("Cause — the mechanism, not the purchase decision",r.cause)}
+        ${f("Prevention control (design)",r.prev)}
+        ${f("Detection control",r.det)}
+        <div class="cp${hasControl?"":" missing"}">
+          <h4>${hasControl?"Control plan":"No control — this row is broken"}</h4>
+          ${f("Characteristic",r.ch)}
+          ${f("Specification",r.spec)}
+          ${f("Method",r.method)}
+          ${f("Sample",r.samp)}
+          ${f("Reaction plan",r.rx)}
+        </div>
+      </div>`;
+    return el;
+  };
+
+  if(byRpn){
+    const sorted=[...visible].sort((a,b)=>(rpn(b.S,b.O,b.D)??-1)-(rpn(a.S,a.O,a.D)??-1));
+    const sec=document.createElement("section");
+    sec.className="sys";
+    sec.innerHTML=`<h2>Ranked by RPN</h2>`;
+    sorted.forEach((r,ix)=>sec.appendChild(card(r,ix+1)));
+    host.appendChild(sec);
+  } else {
+    [...new Set(ROWS.map(r=>r.sys))].forEach(sysName=>{
+      const rows=visible.filter(r=>r.sys===sysName);
+      if(!rows.length) return;
+      const sec=document.createElement("section");
+      sec.className="sys";
+      sec.innerHTML=`<h2>${sysName}</h2>`;
+      rows.forEach(r=>sec.appendChild(card(r,null)));
+      host.appendChild(sec);
+    });
+  }
+
+  $("#count").textContent=`${shown} of ${ROWS.length} rows`;
+  audit();
+}
+
+function audit(){
+  const broken=ROWS.filter(r=>needsAction(r.S,r.O,r.D)&&!(r.ch&&r.method&&r.rx));
+  const gates=ROWS.filter(r=>gated(r.S,r.O,r.D));
+  const cheats=ROWS.filter(r=>r._base.D&&r.D&&r.D<r._base.D&&r.S===r._base.S&&r.O===r._base.O);
+  const unranked=ROWS.filter(r=>rpn(r.S,r.O,r.D)===null);
+  const box=$("#audit");
+  if(!broken.length&&!gates.length&&!cheats.length&&!unranked.length){
+    box.className="audit clean";
+    box.innerHTML="<b>Chain intact</b><p>Every row needing action has a control, no severity gates are open, and nothing was closed on detection alone.</p>";
+    return;
+  }
+  box.className="audit";
+  let h="<b>Chain check</b><ul>";
+  broken.forEach(r=>h+=`<li>Needs action, no control: ${r.fm}</li>`);
+  gates.forEach(r=>h+=`<li>Severity gate open (sev ${r.S}, RPN ${rpn(r.S,r.O,r.D)}): ${r.fm}</li>`);
+  cheats.forEach(r=>h+=`<li>Closed on detection alone: ${r.fm}</li>`);
+  if(unranked.length) h+=`<li>${unranked.length} row${unranked.length>1?"s":""} unranked — no S/O/D, so no RPN</li>`;
+  h+="</ul>";
+  box.innerHTML=h;
+}
+
+function controlPlan(){
+  const rows=[...ROWS].sort((a,b)=>(rpn(b.S,b.O,b.D)??-1)-(rpn(a.S,a.O,a.D)??-1));
+  $("#cplan").innerHTML=`
+    <h2>Control plan</h2>
+    <p>Every line traces to a failure mode in the FMEA — same rows, control-plan view. Sorted by RPN. Red rows are severity 9 or 10.</p>
+    <div class="cpwrap"><table class="cpt">
+      <thead><tr>
+        <th>System</th><th>Characteristic</th><th>Specification</th><th>Method</th>
+        <th>Sample / freq</th><th>Reaction plan</th><th>S</th><th>RPN</th>
+      </tr></thead>
+      <tbody>
+      ${rows.map(r=>{
+        const n=rpn(r.S,r.O,r.D);
+        const filled=!!(r.ch&&r.method&&r.rx);
+        return `<tr class="${r.S>=9?"sev-hi":""}">
+          <td>${r.sys}</td>
+          <td>${filled?r.ch:`<span class="gap">${r.fm}</span>`}${r.S>=9&&filled?'<br><span class="sc">SPECIAL CHAR</span>':""}</td>
+          <td>${r.spec||'<span class="gap">no spec defined</span>'}</td>
+          <td>${r.method||'<span class="gap">no method</span>'}</td>
+          <td>${r.samp||"—"}</td>
+          <td class="rx">${r.rx||'<span class="gap">NO REACTION PLAN</span>'}</td>
+          <td class="n">${r.S??"–"}</td>
+          <td class="n">${n??"–"}</td>
+        </tr>`;
+      }).join("")}
+      </tbody>
+    </table></div>`;
+}
+
+function checklist(){
+  const items=ROWS.filter(r=>r.ch&&r.method).sort((a,b)=>(rpn(b.S,b.O,b.D)??-1)-(rpn(a.S,a.O,a.D)??-1));
+  $("#checklist").innerHTML=`
+    <h2>Pre-grid checklist</h2>
+    <p>Generated from the control plan rows. Highest RPN first. Nothing here was invented for the checklist — every line traces back to a failure mode.</p>
+    ${items.map(r=>`
+      <div class="chk-item">
+        <div class="chk-box"></div>
+        <div class="t">
+          <b>${r.ch}</b>
+          <span>${r.spec} — ${r.method} — ${r.samp}</span>
+          <span class="rx">If it fails: ${r.rx}</span>
+        </div>
+      </div>`).join("")}`;
+}
+
+document.addEventListener("click",e=>{
+  const h=e.target.closest(".rhead");
+  if(h){
+    const row=h.closest(".row"), open=row.classList.toggle("open");
+    h.setAttribute("aria-expanded",open);
+  }
+});
+document.addEventListener("input",e=>{
+  const inp=e.target.closest("input[data-k]");
+  if(!inp) return;
+  const v=parseInt(inp.value,10);
+  ROWS[inp.dataset.i][inp.dataset.k]=(v>=1&&v<=10)?v:null;
+  const r=ROWS[inp.dataset.i], a=ap(r.S,r.O,r.D);
+  const row=inp.closest(".row");
+  row.dataset.ap=a;
+  const badge=row.querySelector(".ap");
+  badge.dataset.v=a; badge.textContent="AP "+a;
+  const n=rpn(r.S,r.O,r.D), gate=gated(r.S,r.O,r.D);
+  const rb=row.querySelector(".rpn");
+  rb.textContent="RPN "+(n??"–");
+  rb.classList.toggle("gated",!!gate);
+  const body=row.querySelector(".rbody");
+  let note=body.querySelector(".gate-note");
+  if(gate){
+    if(!note){
+      note=document.createElement("div");
+      note.className="gate-note";
+      body.querySelector(".sod").after(note);
+    }
+    note.innerHTML="<b>Severity gate — action required</b>"+gate;
+  } else if(note){ note.remove(); }
+  if(inp.dataset.k==="D") flagDetectionClose(row,r);
+  audit();
+});
+$("#f-hi").onclick=e=>{hiOnly=!hiOnly;e.currentTarget.setAttribute("aria-pressed",hiOnly);render()};
+$("#expand").onclick=e=>{
+  allOpen=!allOpen; e.currentTarget.textContent=allOpen?"Collapse all":"Expand all"; render();
+};
+$("#v-fmea").onclick=()=>setView("fmea");
+$("#v-cp").onclick=()=>setView("cp");
+$("#v-chk").onclick=()=>setView("chk");
+function setView(v){
+  view=v;
+  $("#v-fmea").setAttribute("aria-pressed",v==="fmea");
+  $("#v-cp").setAttribute("aria-pressed",v==="cp");
+  $("#v-chk").setAttribute("aria-pressed",v==="chk");
+  $("#fmea").classList.toggle("hide",v!=="fmea");
+  $("#audit").classList.toggle("hide",v!=="fmea");
+  $("#f-hi").classList.toggle("hide",v!=="fmea");
+  $("#expand").classList.toggle("hide",v!=="fmea");
+  $("#sort").classList.toggle("hide",v!=="fmea");
+  $("#cplan").classList.toggle("hide",v!=="cp");
+  $("#checklist").classList.toggle("hide",v!=="chk");
+  if(v==="cp") controlPlan();
+  if(v==="chk") checklist();
+}
+$("#sort").onclick=e=>{
+  byRpn=!byRpn;
+  e.currentTarget.textContent=byRpn?"Group by system":"Rank by RPN";
+  render();
+};
+$("#print").onclick=()=>window.print();
+$("#export").onclick=()=>{
+  const blob=new Blob([JSON.stringify(ROWS,null,2)],{type:"application/json"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob); a.download="944-fmea.json"; a.click();
+};
+render();
+</script>
+</body>
+</html>
