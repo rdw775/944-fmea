@@ -95,6 +95,8 @@ button{
 button:hover{background:var(--ink);color:var(--paper)}
 button:focus-visible{outline:3px solid var(--tape);outline-offset:2px}
 button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+#export,#export-log,#export-comments{border-color:var(--tape);color:var(--tape)}
+#export:hover,#export-log:hover,#export-comments:hover{background:var(--tape);color:#fff}
 .bar .sep{flex:1}
 .bar .count{font-size:13px;color:var(--ink-2)}
 
@@ -384,7 +386,7 @@ table.sevt td.n{font-family:"IBM Plex Mono",monospace;font-weight:600;white-spac
   <span class="sep"></span>
   <span class="count" id="count"></span>
   <button id="print">Print</button>
-  <button id="export">Export JSON</button>
+  <button id="export">⬇ Export JSON</button>
   <button id="reset">Reset to defaults</button>
 </div>
 
@@ -491,7 +493,7 @@ table.sevt td.n{font-family:"IBM Plex Mono",monospace;font-weight:600;white-spac
     <button id="c-post">Post comment</button>
   </div>
   <div class="clist" id="c-list"></div>
-  <button id="export-comments" style="margin-top:14px">Export comments</button>
+  <button id="export-comments" style="margin-top:14px">⬇ Export comments</button>
 </section>
 
 <p class="foot">
@@ -993,8 +995,8 @@ function sessionLog(){
   const sorted=[...SESSIONS].sort((a,b)=>b.ts-a.ts);
   host.innerHTML=`
     <h2>Session log</h2>
-    <p>${SESSIONS.length} session${SESSIONS.length>1?"s":""} banked, most recent first. Saved to this browser only —
-    <button id="export-log">export session log</button> for a portable copy.</p>
+    <p>${SESSIONS.length} session${SESSIONS.length>1?"s":""} banked, most recent first. Saved to this browser only — export for a portable copy.</p>
+    <button id="export-log">⬇ Export session log</button>
     ${sorted.map(s=>{
       const passes=s.entries.filter(e=>e.status==="pass").length;
       const fails=s.entries.filter(e=>e.status==="fail").length;
