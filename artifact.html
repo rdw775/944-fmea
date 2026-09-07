@@ -214,6 +214,14 @@ button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
 .chg-entry-meta{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--ink-3)}
 .chg-entry-reason{font-size:13.5px;margin-top:2px}
 
+.evid{margin-top:10px;border-left:4px solid var(--hi);background:#fff6f6;padding:9px 12px}
+.evid-title{font-family:"Archivo Narrow",sans-serif;font-size:12.5px;color:var(--hi);text-transform:uppercase;letter-spacing:.03em;margin-bottom:6px}
+.evid-entry{margin-bottom:8px}
+.evid-entry:last-child{margin-bottom:0}
+.evid-entry-meta{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--ink-3)}
+.evid-entry-text{font-size:13.5px;margin-top:2px;line-height:1.45;color:var(--ink-2)}
+.evid-entry-link{font-size:12.5px;color:var(--tape);display:inline-block;margin-top:4px}
+
 .submit-all{
   border:2px solid var(--tape);background:var(--card);padding:18px 20px;
   margin:6px 0 26px;display:flex;flex-direction:column;gap:12px;
@@ -582,7 +590,10 @@ const ROWS = [
   spec:"Zero loss. Pedal holds firm under sustained load, no dampness at any joint",
   method:"Pedal depressor at working pressure held 15+ minutes, paper towel witness at each fitting; reservoir level marked and re-checked",
   samp:"100% of joints at build, every joint visually each session",
-  rx:"Any dampness → car does not move. Do not re-torque to chase a leak — an over-torqued seat is deformed permanently. Cut the flare off, verify the profile against the port, re-flare, re-test"
+  rx:"Any dampness → car does not move. Do not re-torque to chase a leak — an over-torqued seat is deformed permanently. Cut the flare off, verify the profile against the port, re-flare, re-test",
+  evidence:[
+   {date:"2026-09-05", text:"Porsche Sprint Challenge USA West race at Laguna Seca — driver lost brakes entering the Zanardi Corkscrew, went airborne, cleared the tire pack, and tore through the catch fence into the trees. Front suspension separated from the chassis on impact; driver airlifted to hospital, reported awake and being treated. Not this car or team, but the exact failure mode and exact corner this row already flags at severity 10.", url:"https://racingnews.co/2026/09/05/laguna-seca-driver-jumps-corkscrew-turn-lands-in-trees-video/"}
+  ]
  },
  {
   sys:"Cooling", fn:"Reject enough heat to hold coolant and oil temperature over a full 20-minute session",
@@ -743,6 +754,15 @@ function esc(s){
   return String(s).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
 }
 
+function evidenceHtml(r){
+  if(!r.evidence||!r.evidence.length) return "";
+  return `<div class="evid"><div class="evid-title">Supporting evidence</div>${r.evidence.map(e=>`
+    <div class="evid-entry">
+      <div class="evid-entry-meta">${esc(e.date)}</div>
+      <div class="evid-entry-text">${esc(e.text)}</div>
+      ${e.url?`<a class="evid-entry-link" href="${esc(e.url)}" target="_blank" rel="noopener noreferrer">Source ↗</a>`:""}
+    </div>`).join("")}</div>`;
+}
 function historyEntryHtml(h){
   return `<div class="chg-entry">
     <div class="chg-entry-meta">${esc(new Date(h.ts).toLocaleString())} — S ${h.from.S??"–"}→${h.to.S??"–"}, O ${h.from.O??"–"}→${h.to.O??"–"}, D ${h.from.D??"–"}→${h.to.D??"–"}</div>
@@ -829,6 +849,7 @@ function render(){
       </button>
       <div class="rbody">
         ${f("Effect — worst credible outcome",r.eff)}
+        ${evidenceHtml(r)}
         <div class="sod">
           <label><div class="k">Severity</div><input type="number" min="1" max="10" value="${r.S??""}" data-i="${i}" data-k="S" placeholder="–"></label>
           <label><div class="k">Occurrence</div><input type="number" min="1" max="10" value="${r.O??""}" data-i="${i}" data-k="O" placeholder="–"></label>
