@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>944 Track Car — FMEA &amp; Control Plan</title>
+<title>944 Track Car — PFMEA</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Archivo+Narrow:wght@500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -11,173 +11,89 @@
 :root{
   color-scheme:light only;
   forced-color-adjust:none;
-  --ink:#16181c;
-  --ink-2:#4b525c;
-  --ink-3:#7b838f;
-  --rule:#c8ccd2;
-  --rule-hard:#16181c;
-  --paper:#f2f3f0;
-  --card:#ffffff;
-  --hi:#b3121a;      /* signal red  */
-  --md:#c07600;      /* signal amber */
-  --lo:#2f6b3a;      /* signal green */
-  --tape:#1d4ed8;
+  --ink:#16181c; --ink-2:#4b525c; --ink-3:#7b838f;
+  --rule:#c8ccd2; --rule-hard:#16181c; --paper:#f2f3f0; --card:#ffffff;
+  --hi:#b3121a; --md:#c07600; --lo:#2f6b3a; --tape:#1d4ed8;
 }
 *{box-sizing:border-box}
-html{
-  -webkit-text-size-adjust:100%;
-  background:#f2f3f0;
-  color-scheme:light only;
-}
-body{
-  margin:0;
-  min-height:100%;
-  background:#f2f3f0;
-  color:#16181c;
-  font-family:"Archivo",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
-  font-size:15px;
-  line-height:1.5;
-}
+html{-webkit-text-size-adjust:100%;background:#f2f3f0;color-scheme:light only}
+body{margin:0;min-height:100%;background:#f2f3f0;color:#16181c;font-family:"Archivo",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;font-size:15px;line-height:1.5}
 .wrap{max-width:1180px;margin:0 auto;padding:0 18px 90px;background:#f2f3f0;min-height:100vh}
 
-/* ---------- masthead: scrutineering sheet ---------- */
-header.sheet{
-  border-bottom:3px solid var(--rule-hard);
-  padding:26px 0 14px;
-  margin-bottom:22px;
-}
-.sheet h1{
-  color:#16181c;
-  font-family:"Archivo Narrow","Archivo",sans-serif;
-  font-weight:700;
-  font-size:clamp(30px,7vw,50px);
-  line-height:.98;
-  letter-spacing:-.015em;
-  margin:0 0 14px;
-}
+/* ---------- masthead ---------- */
+header.sheet{border-bottom:3px solid var(--rule-hard);padding:22px 0 14px;margin-bottom:16px}
+.mast{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px 24px}
+.sheet h1{color:#16181c;font-family:"Archivo Narrow","Archivo",sans-serif;font-weight:700;font-size:clamp(30px,7vw,50px);line-height:.98;letter-spacing:-.015em;margin:0}
 .sheet h1 span{display:block;color:var(--ink-3);font-weight:600;font-size:.44em;letter-spacing:.01em;margin-top:8px}
-.spec-row{
-  display:flex;flex-wrap:wrap;gap:0;
-  border-top:1px solid var(--rule);
-}
-.spec{
-  flex:1 1 150px;
-  padding:9px 14px 9px 0;
-  border-right:1px solid var(--rule);
-}
+.mast .sep{flex:1}
+.who{display:flex;flex-direction:column;gap:3px;min-width:200px}
+.who label{font-size:11.5px;color:var(--ink-3)}
+.who input{font:inherit;font-size:14px;font-weight:600;padding:7px 9px;border:1px solid var(--rule-hard);border-radius:0;background:#fff;color:var(--ink)}
+.who input:invalid,.who input.need{border-color:var(--md);border-width:2px}
+.conn{font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:12px;padding:4px 9px;border:1.5px solid var(--rule);white-space:nowrap;color:var(--ink-3)}
+.conn.live{color:var(--lo);border-color:var(--lo)}
+.conn.off{color:var(--md);border-color:var(--md)}
+.spec-row{display:flex;flex-wrap:wrap;gap:0;border-top:1px solid var(--rule);margin-top:14px}
+.spec{flex:1 1 150px;padding:9px 14px 9px 0;border-right:1px solid var(--rule)}
 .spec:last-child{border-right:0}
 .spec dt{font-size:11.5px;color:var(--ink-3);margin:0 0 2px}
 .spec dd{margin:0;font-weight:600;font-size:15px}
 .spec dd.target{font-family:"IBM Plex Mono",ui-monospace,monospace;font-weight:600}
 
-/* ---------- chain explainer ---------- */
-.chain{
-  display:flex;align-items:stretch;flex-wrap:wrap;gap:0;
-  border:1px solid var(--rule);background:var(--card);
-  margin:0 0 26px;
-}
-.chain .link{flex:1 1 190px;padding:13px 16px;border-right:1px solid var(--rule)}
-.chain .link:last-child{border-right:0}
-.chain b{display:block;font-family:"Archivo Narrow",sans-serif;font-size:16px;margin-bottom:3px}
-.chain p{margin:0;font-size:13px;color:var(--ink-2);line-height:1.42}
-
-/* ---------- controls bar ---------- */
-.bar{
-  display:flex;flex-wrap:wrap;gap:8px;align-items:center;
-  padding-bottom:14px;margin-bottom:18px;border-bottom:1px solid var(--rule);
-}
-button{
-  font:inherit;font-size:13.5px;font-weight:600;
-  background:var(--card);color:var(--ink);
-  border:1px solid var(--rule-hard);border-radius:0;
-  padding:7px 13px;cursor:pointer;
-}
+/* ---------- two-level nav ---------- */
+.nav1{display:flex;gap:0;border:1px solid var(--rule-hard);margin-bottom:10px;background:var(--card)}
+.nav1 button{flex:1;font:inherit;font-family:"Archivo Narrow",sans-serif;font-weight:700;font-size:16px;letter-spacing:.01em;padding:12px 8px;background:var(--card);color:var(--ink);border:0;border-right:1px solid var(--rule);border-radius:0;cursor:pointer}
+.nav1 button:last-child{border-right:0}
+.nav1 button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.nav1 button:focus-visible{outline:3px solid var(--tape);outline-offset:-3px}
+.nav2{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding-bottom:12px;margin-bottom:16px;border-bottom:1px solid var(--rule)}
+button{font:inherit;font-size:13.5px;font-weight:600;background:var(--card);color:var(--ink);border:1px solid var(--rule-hard);border-radius:0;padding:7px 13px;cursor:pointer}
 button:hover{background:var(--ink);color:var(--paper)}
 button:focus-visible{outline:3px solid var(--tape);outline-offset:2px}
 button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
-#export,#export-log,#export-comments{border-color:var(--tape);color:var(--tape)}
-#export:hover,#export-log:hover,#export-comments:hover{background:var(--tape);color:#fff}
-.bar .sep{flex:1}
-.bar .count{font-size:13px;color:var(--ink-2)}
+button:disabled{background:var(--paper);color:var(--ink-3);border-color:var(--rule);cursor:not-allowed}
+.nav2 .sep{flex:1}
+.nav2 .count{font-size:13px;color:var(--ink-2)}
+#export{border-color:var(--tape);color:var(--tape)}
+#export:hover{background:var(--tape);color:#fff}
 
 /* ---------- audit banner ---------- */
 .audit{border:2px solid var(--hi);background:#fff;padding:13px 16px;margin-bottom:20px}
 .audit.clean{border-color:var(--lo)}
-.audit b{
-  color:#16181c;font-family:"Archivo Narrow",sans-serif;font-size:16px;display:block;margin-bottom:3px}
+.audit b{color:#16181c;font-family:"Archivo Narrow",sans-serif;font-size:16px;display:block;margin-bottom:3px}
 .audit ul{margin:6px 0 0;padding-left:19px;font-size:13.5px;color:var(--ink-2)}
 .audit p{margin:0;font-size:13.5px;color:var(--ink-2)}
 
-/* ---------- system groups ---------- */
+/* ---------- rows ---------- */
 .sys{margin-bottom:30px}
-.sys > h2{
-  color:#16181c;
-  font-family:"Archivo Narrow",sans-serif;font-size:20px;font-weight:700;
-  margin:0 0 10px;padding-bottom:6px;border-bottom:2px solid var(--rule-hard);
-}
-
-/* ---------- row card ---------- */
-.row{
-  background:var(--card);border:1px solid var(--rule);
-  border-left:6px solid var(--rule);
-  margin-bottom:11px;
-}
+.sys > h2{color:#16181c;font-family:"Archivo Narrow",sans-serif;font-size:20px;font-weight:700;margin:0 0 10px;padding-bottom:6px;border-bottom:2px solid var(--rule-hard)}
+.row{background:var(--card);border:1px solid var(--rule);border-left:6px solid var(--rule);margin-bottom:11px}
 .row[data-ap="H"]{border-left-color:var(--hi)}
 .row[data-ap="M"]{border-left-color:var(--md)}
 .row[data-ap="L"]{border-left-color:var(--lo)}
 .row[data-ap="?"]{border-left-color:var(--rule);border-left-style:dashed}
 .row.todo{background:repeating-linear-gradient(135deg,#fff,#fff 11px,#fbfbf8 11px,#fbfbf8 22px)}
-
-.rhead{
-  display:flex;gap:12px;align-items:flex-start;
-  padding:12px 14px;cursor:pointer;width:100%;text-align:left;
-  background:none;border:0;font:inherit;
-}
+.rhead{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;cursor:pointer;width:100%;text-align:left;background:none;border:0;font:inherit}
 .rhead:hover{background:#f7f8f5;color:inherit}
 .rhead .fm{flex:1;min-width:0}
 .rhead .fm b{display:block;font-weight:600;font-size:15.5px;line-height:1.3}
 .rhead .fm em{display:block;font-style:normal;font-size:13px;color:var(--ink-2);margin-top:3px}
-.ap{
-  font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:12px;
-  padding:3px 8px;border:1.5px solid;white-space:nowrap;align-self:center;
-}
+.rank{font-family:"IBM Plex Mono",monospace;font-size:13px;font-weight:600;color:var(--ink-3);align-self:center;min-width:26px;text-align:right;flex:none}
+.sys-tag{display:inline-block;font-family:"Archivo Narrow",sans-serif;font-size:11px;letter-spacing:.03em;text-transform:uppercase;color:var(--ink-3);border:1px solid var(--rule);padding:1px 6px;margin-bottom:5px}
+.badges{display:flex;flex-direction:column;gap:4px;align-self:center;align-items:stretch}
+.rpn{font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:16px;padding:5px 10px;border:2px solid var(--ink);color:var(--ink);white-space:nowrap;text-align:center}
+.rpn.gated{border-color:var(--hi);color:var(--hi)}
+.ap{font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:11px;padding:2px 8px;border:1px solid;white-space:nowrap;text-align:center;opacity:.65}
 .ap[data-v="H"]{color:var(--hi);border-color:var(--hi)}
 .ap[data-v="M"]{color:var(--md);border-color:var(--md)}
 .ap[data-v="L"]{color:var(--lo);border-color:var(--lo)}
 .ap[data-v="?"]{color:var(--ink-3);border-color:var(--rule)}
-.rank{
-  font-family:"IBM Plex Mono",monospace;font-size:13px;font-weight:600;
-  color:var(--ink-3);align-self:center;min-width:26px;text-align:right;flex:none;
-}
-.sys-tag{
-  display:inline-block;font-family:"Archivo Narrow",sans-serif;font-size:11px;
-  letter-spacing:.03em;text-transform:uppercase;color:var(--ink-3);
-  border:1px solid var(--rule);padding:1px 6px;margin-bottom:5px;
-}
-.badges{display:flex;flex-direction:column;gap:4px;align-self:center;align-items:stretch}
-.rpn{
-  font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:16px;
-  padding:5px 10px;border:2px solid var(--ink);color:var(--ink);
-  white-space:nowrap;text-align:center;
-}
-.rpn.gated{border-color:var(--hi);color:var(--hi)}
-.ap{
-  font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:11px;
-  padding:2px 8px;border:1px solid;white-space:nowrap;text-align:center;opacity:.65;
-}
-.gate-note{
-  margin-top:10px;border-left:4px solid var(--hi);background:#fff6f6;
-  padding:9px 12px;font-size:13.5px;line-height:1.45;color:var(--ink-2);
-}
+.gate-note{margin-top:10px;border-left:4px solid var(--hi);background:#fff6f6;padding:9px 12px;font-size:13.5px;line-height:1.45;color:var(--ink-2)}
 .gate-note b{color:var(--hi);display:block;font-family:"Archivo Narrow",sans-serif;font-size:14.5px;margin-bottom:2px}
-.rules{
-  border:1px solid var(--rule-hard);background:var(--card);padding:13px 16px;margin-bottom:20px;
-}
-.rules h3{
-  color:#16181c;font-family:"Archivo Narrow",sans-serif;margin:0 0 7px;font-size:16px}
+.rules{border:1px solid var(--rule-hard);background:var(--card);padding:13px 16px;margin-bottom:20px}
+.rules h3{color:#16181c;font-family:"Archivo Narrow",sans-serif;margin:0 0 7px;font-size:16px}
 .rules ol{margin:0;padding-left:19px;font-size:13.5px;color:var(--ink-2);line-height:1.5}
 .rules li{margin-bottom:4px}
-
 .rbody{display:none;padding:0 14px 15px;border-top:1px dashed var(--rule)}
 .row.open .rbody{display:block}
 .field{padding:9px 0;border-bottom:1px dotted var(--rule)}
@@ -185,178 +101,130 @@ button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
 .field .k{font-size:11.5px;color:var(--ink-3);margin-bottom:2px}
 .field .v{font-size:14px;line-height:1.45}
 .field .v.empty{color:var(--ink-3);font-style:italic}
-
 .sod{display:flex;gap:10px;padding:11px 0;border-bottom:1px dotted var(--rule)}
 .sod label{flex:1}
 .sod .k{font-size:11.5px;color:var(--ink-3);margin-bottom:3px}
-.sod input{
-  width:100%;font-family:"IBM Plex Mono",monospace;font-size:17px;font-weight:600;
-  padding:6px 8px;border:1px solid var(--rule-hard);border-radius:0;background:#fff;color:var(--ink);
-}
+.sod input{width:100%;font-family:"IBM Plex Mono",monospace;font-size:17px;font-weight:600;padding:6px 8px;border:1px solid var(--rule-hard);border-radius:0;background:#fff;color:var(--ink)}
 .sod input:focus-visible{outline:3px solid var(--tape);outline-offset:1px}
 .sod.dirty input{border-color:var(--md);border-width:2px}
-
 .chg{margin:12px 0;border:1px solid var(--rule-hard);padding:11px 13px;background:#fffdf6}
 .chg-label{display:block;font-size:11.5px;color:var(--ink-3);margin-bottom:6px}
 .chg-label .req{color:var(--md);font-weight:600}
-.chg textarea.chg-reason{
-  width:100%;font:inherit;font-size:14px;padding:7px 9px;border:1px solid var(--rule-hard);
-  border-radius:0;background:#fff;color:var(--ink);resize:vertical;min-height:44px;
-}
+.chg textarea.chg-reason{width:100%;font:inherit;font-size:14px;padding:7px 9px;border:1px solid var(--rule-hard);border-radius:0;background:#fff;color:var(--ink);resize:vertical;min-height:44px}
 .chg-history{margin-top:12px;border-top:1px dashed var(--rule);padding-top:10px}
-.chg-history-title{font-family:"Archivo Narrow",sans-serif;font-size:12.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.03em;margin-bottom:6px}
+.chg-history-title,.evid-title{font-family:"Archivo Narrow",sans-serif;font-size:12.5px;text-transform:uppercase;letter-spacing:.03em;margin-bottom:6px}
+.chg-history-title{color:var(--ink-3)}
 .chg-entry{margin-bottom:8px}
 .chg-entry:last-child{margin-bottom:0}
-.chg-entry-meta{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--ink-3)}
+.chg-entry-meta,.evid-entry-meta{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--ink-3)}
 .chg-entry-reason{font-size:13.5px;margin-top:2px}
-
 .evid{margin-top:10px;border-left:4px solid var(--hi);background:#fff6f6;padding:9px 12px}
-.evid-title{font-family:"Archivo Narrow",sans-serif;font-size:12.5px;color:var(--hi);text-transform:uppercase;letter-spacing:.03em;margin-bottom:6px}
+.evid-title{color:var(--hi)}
 .evid-entry{margin-bottom:8px}
 .evid-entry:last-child{margin-bottom:0}
-.evid-entry-meta{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--ink-3)}
 .evid-entry-text{font-size:13.5px;margin-top:2px;line-height:1.45;color:var(--ink-2)}
 .evid-entry-link{font-size:12.5px;color:var(--tape);display:inline-block;margin-top:4px}
-
-.submit-all{
-  border:2px solid var(--tape);background:var(--card);padding:18px 20px;
-  margin:6px 0 26px;display:flex;flex-direction:column;gap:12px;
-}
-.submit-all .info{font-size:14px;color:var(--ink-2)}
-.submit-all .info b{display:block;font-family:"Archivo Narrow",sans-serif;font-size:16px;color:var(--ink);margin-bottom:3px}
-.submit-all .info .missing{display:block;color:var(--hi);font-weight:600;margin-top:3px}
-#submitAllBtn{
-  width:100%;padding:22px 20px;font-size:20px;font-weight:700;letter-spacing:.02em;
-  font-family:"Archivo Narrow",sans-serif;text-transform:uppercase;
-  background:var(--tape);color:#fff;border:2px solid var(--tape);border-radius:0;cursor:pointer;
-}
-#submitAllBtn:hover:not(:disabled){background:#1543ad;border-color:#1543ad;color:#fff}
-#submitAllBtn:disabled{background:var(--paper);color:var(--ink-3);border-color:var(--rule);cursor:not-allowed}
-#submitAllBtn:focus-visible{outline:3px solid var(--hi);outline-offset:2px}
-
 .cp{margin-top:12px;border:1px solid var(--rule-hard);padding:11px 13px;background:#fbfbf8}
 .cp h4{font-family:"Archivo Narrow",sans-serif;margin:0 0 7px;font-size:15px}
 .cp .field{border-color:#e3e5e0}
 .cp.missing{border-color:var(--hi);background:#fff6f6}
 .cp.missing h4{color:var(--hi)}
 
-/* ---------- checklist view ---------- */
-.chk{background:var(--card);border:1px solid var(--rule-hard);padding:16px 18px}
-.chk h2{
-  color:#16181c;font-family:"Archivo Narrow",sans-serif;margin:0 0 4px;font-size:22px}
-.chk > p{margin:0 0 14px;font-size:13.5px;color:var(--ink-2)}
+/* ---------- submit bar ---------- */
+.submit-all{border:2px solid var(--tape);background:var(--card);padding:18px 20px;margin:6px 0 26px;display:flex;flex-direction:column;gap:12px}
+.submit-all .info{font-size:14px;color:var(--ink-2)}
+.submit-all .info b{display:block;font-family:"Archivo Narrow",sans-serif;font-size:16px;color:var(--ink);margin-bottom:3px}
+.submit-all .info .missing{display:block;color:var(--hi);font-weight:600;margin-top:3px}
+#submitAllBtn{width:100%;padding:22px 20px;font-size:20px;font-weight:700;letter-spacing:.02em;font-family:"Archivo Narrow",sans-serif;text-transform:uppercase;background:var(--tape);color:#fff;border:2px solid var(--tape);border-radius:0;cursor:pointer}
+#submitAllBtn:hover:not(:disabled){background:#1543ad;border-color:#1543ad;color:#fff}
+#submitAllBtn:disabled{background:var(--paper);color:var(--ink-3);border-color:var(--rule);cursor:not-allowed}
+#submitAllBtn:focus-visible{outline:3px solid var(--hi);outline-offset:2px}
+
+/* ---------- panels (checklist, log, tasks, reference) ---------- */
+.panel{background:var(--card);border:1px solid var(--rule-hard);padding:16px 18px}
+.panel h2{color:#16181c;font-family:"Archivo Narrow",sans-serif;margin:0 0 4px;font-size:22px}
+.panel > p.lede{margin:0 0 14px;font-size:13.5px;color:var(--ink-2)}
+.panel h3{font-family:"Archivo Narrow",sans-serif;font-size:17px;margin:22px 0 8px;padding-bottom:5px;border-bottom:2px solid var(--rule-hard)}
+.panel h3:first-of-type{margin-top:0}
+.empty{color:var(--ink-3);font-style:italic;font-size:13.5px}
+.head{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--rule)}
+.head label{font-size:11.5px;color:var(--ink-3);display:flex;flex-direction:column;gap:4px;flex:1 1 180px}
+.head input[type="date"],.head input[type="text"],.panel textarea,.panel input.txt{font:inherit;font-size:14px;padding:7px 9px;border:1px solid var(--rule-hard);border-radius:0;background:#fff;color:var(--ink);width:100%}
+.panel textarea{resize:vertical;min-height:64px}
+.msg{margin:12px 0 0;font-size:13.5px;font-weight:600;min-height:1.4em}
+.msg.ok{color:var(--lo)} .msg.err{color:var(--hi)}
 .chk-item{display:flex;gap:11px;padding:11px 0;border-top:1px solid var(--rule)}
 .chk-item.pass{background:#f6fbf7}
 .chk-item.fail{background:#fff6f6}
-.chk-box{
-  width:24px;height:24px;border:2px solid var(--rule-hard);flex:none;margin-top:2px;
-  cursor:pointer;background:#fff;padding:0;border-radius:0;
-  display:flex;align-items:center;justify-content:center;
-  font-family:"IBM Plex Mono",monospace;font-weight:700;font-size:14px;
-}
+.chk-box{width:24px;height:24px;border:2px solid var(--rule-hard);flex:none;margin-top:2px;cursor:pointer;background:#fff;padding:0;border-radius:0;display:flex;align-items:center;justify-content:center;font-family:"IBM Plex Mono",monospace;font-weight:700;font-size:14px}
 .chk-box[data-status="pass"]{background:var(--lo);border-color:var(--lo);color:#fff}
 .chk-box[data-status="fail"]{background:var(--hi);border-color:var(--hi);color:#fff}
 .chk-item .t b{display:block;font-size:15px}
 .chk-item .t span{display:block;font-size:13px;color:var(--ink-2);margin-top:2px}
 .chk-item .t .rx{color:var(--hi);font-weight:600}
-.chk-note{
-  margin-top:7px;width:100%;font:inherit;font-size:13px;padding:6px 8px;
-  border:1px solid var(--rule-hard);border-radius:0;background:#fff;color:var(--ink);
-}
-.chk-head{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--rule)}
-.chk-head label{font-size:11.5px;color:var(--ink-3);display:flex;flex-direction:column;gap:4px}
-.chk-head input[type="date"],.chk-head input[type="text"]{
-  font:inherit;font-size:14px;padding:6px 8px;border:1px solid var(--rule-hard);border-radius:0;background:#fff;color:var(--ink);
-}
-.chk-head .sep{flex:1}
-.chk-msg{margin:14px 0 0;font-size:13.5px;font-weight:600}
-
-.cpwrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--rule-hard)}
-table.cpt{border-collapse:collapse;width:100%;min-width:900px;font-size:13px;background:var(--card)}
-table.cpt th{
-  font-family:"Archivo Narrow",sans-serif;font-size:12px;text-align:left;
-  background:var(--ink);color:var(--paper);padding:8px 10px;font-weight:600;
-  position:sticky;top:0;
-}
-table.cpt td{padding:9px 10px;border-top:1px solid var(--rule);vertical-align:top;line-height:1.4}
-table.cpt tr.sev-hi td:first-child{border-left:5px solid var(--hi)}
-table.cpt td.n{font-family:"IBM Plex Mono",monospace;font-weight:600;text-align:right;white-space:nowrap}
-table.cpt td.rx{color:var(--hi)}
-table.cpt td.gap{color:var(--hi);font-style:italic;font-weight:600}
-table.cpt .sc{
-  display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:10px;
-  border:1px solid var(--hi);color:var(--hi);padding:1px 4px;margin-top:3px;
-}
-.seswrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--rule-hard);margin-top:8px}
-table.sest{border-collapse:collapse;width:100%;min-width:680px;font-size:13px;background:var(--card)}
-table.sest th{
-  font-family:"Archivo Narrow",sans-serif;font-size:12px;text-align:left;
-  background:var(--ink);color:var(--paper);padding:8px 10px;font-weight:600;
-}
-table.sest td{padding:8px 10px;border-top:1px solid var(--rule);vertical-align:top;line-height:1.4}
-table.sest tr.fail td{background:#fff6f6}
-table.sest td.status-pass{color:var(--lo);font-weight:600}
-table.sest td.status-fail{color:var(--hi);font-weight:600}
+.chk-note{margin-top:7px;width:100%;font:inherit;font-size:13px;padding:6px 8px;border:1px solid var(--rule-hard);border-radius:0;background:#fff;color:var(--ink)}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--rule-hard);margin-top:8px}
+table.t{border-collapse:collapse;width:100%;min-width:680px;font-size:13px;background:var(--card)}
+table.t th{font-family:"Archivo Narrow",sans-serif;font-size:12px;text-align:left;background:var(--ink);color:var(--paper);padding:8px 10px;font-weight:600}
+table.t td{padding:8px 10px;border-top:1px solid var(--rule);vertical-align:top;line-height:1.4}
+table.t td.n{font-family:"IBM Plex Mono",monospace;font-weight:600;text-align:right;white-space:nowrap}
+table.t td.m{font-family:"IBM Plex Mono",monospace;font-size:12px;white-space:nowrap}
+table.t tr.fail td{background:#fff6f6}
+table.t tr.sev-hi td:first-child{border-left:5px solid var(--hi)}
+table.t td.rx{color:var(--hi)}
+table.t td.gap{color:var(--hi);font-style:italic;font-weight:600}
+table.t td.status-pass{color:var(--lo);font-weight:600}
+table.t td.status-fail{color:var(--hi);font-weight:600}
+table.t .sc{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:10px;border:1px solid var(--hi);color:var(--hi);padding:1px 4px;margin-top:3px}
 .sess-block{margin-top:22px}
 .sess-block:first-of-type{margin-top:0}
 .sess-hd{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding-bottom:10px;border-bottom:2px solid var(--rule-hard)}
-.sess-hd .sep{flex:1}
 .sess-hd .meta{font-size:12px;color:var(--ink-2);margin-top:2px}
-.log-empty{color:var(--ink-3);font-style:italic;font-size:13.5px}
-
-/* ---------- reference guide ---------- */
-.ref{background:var(--card);border:1px solid var(--rule-hard);padding:16px 18px 6px}
-.ref h2{color:#16181c;font-family:"Archivo Narrow",sans-serif;margin:0 0 4px;font-size:22px}
-.ref > p.lede{margin:0 0 18px;font-size:13.5px;color:var(--ink-2)}
-.ref section{margin-bottom:26px}
-.ref h3{font-family:"Archivo Narrow",sans-serif;font-size:17px;margin:0 0 8px;padding-bottom:5px;border-bottom:2px solid var(--rule-hard)}
-.ref h4{font-family:"Archivo Narrow",sans-serif;font-size:14.5px;margin:14px 0 4px}
-.ref p{margin:0 0 10px;font-size:14px;line-height:1.55;color:var(--ink-2)}
-.ref p:last-child{margin-bottom:0}
-.ref ul,.ref ol{margin:0 0 10px;padding-left:20px;font-size:14px;line-height:1.55;color:var(--ink-2)}
-.ref li{margin-bottom:4px}
-.ref .chain-mini{display:flex;flex-wrap:wrap;gap:0;border:1px solid var(--rule);margin-bottom:12px}
-.ref .chain-mini div{flex:1 1 140px;padding:9px 12px;border-right:1px solid var(--rule);font-size:12.5px;color:var(--ink-2)}
-.ref .chain-mini div:last-child{border-right:0}
-.ref .chain-mini b{display:block;font-family:"Archivo Narrow",sans-serif;font-size:13px;color:var(--ink);margin-bottom:2px}
-.sevwrap{overflow-x:auto;border:1px solid var(--rule-hard);margin-bottom:10px}
-table.sevt{border-collapse:collapse;width:100%;min-width:420px;font-size:13.5px;background:var(--card)}
-table.sevt th{font-family:"Archivo Narrow",sans-serif;font-size:12px;text-align:left;background:var(--ink);color:var(--paper);padding:7px 10px;font-weight:600}
-table.sevt td{padding:7px 10px;border-top:1px solid var(--rule)}
-table.sevt td.n{font-family:"IBM Plex Mono",monospace;font-weight:600;white-space:nowrap}
-
-/* ---------- comment box ---------- */
-.comments{margin-top:26px;border:2px solid var(--tape);background:var(--card);padding:16px 18px}
-.comments h2{font-family:"Archivo Narrow",sans-serif;font-size:19px;margin:0 0 4px;color:var(--tape)}
-.comments > p{margin:0 0 14px;font-size:13px;color:var(--ink-2)}
-.cbox{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
-.cbox input[type="text"],.cbox textarea{
-  font:inherit;font-size:14px;padding:8px 10px;border:1px solid var(--rule-hard);border-radius:0;
-  background:#fff;color:var(--ink);resize:vertical;
-}
-.cbox textarea{min-height:70px}
-.cbox button{align-self:flex-start}
-.clist{display:flex;flex-direction:column;gap:12px}
-.citem{border-top:1px solid var(--rule);padding-top:10px}
+.citem{border-top:1px solid var(--rule);padding:10px 0}
 .citem .cwho{font-weight:600;font-size:13.5px}
 .citem .cwhen{font-size:11.5px;color:var(--ink-3);margin-left:6px}
 .citem .ctext{font-size:14px;margin-top:3px;white-space:pre-wrap;line-height:1.45}
-.citem .cdel{font-size:11px;padding:3px 8px;margin-top:6px}
-.clist-empty{color:var(--ink-3);font-style:italic;font-size:13.5px}
+.cbox{display:flex;flex-direction:column;gap:8px;margin-bottom:6px}
+.cbox button{align-self:flex-start}
+
+/* ---------- tasks ---------- */
+.task{display:flex;gap:12px;padding:12px 0;border-top:1px solid var(--rule);align-items:flex-start}
+.task:first-of-type{border-top:0}
+.tstat{flex:none;font-family:"IBM Plex Mono",monospace;font-weight:700;font-size:11.5px;letter-spacing:.04em;text-transform:uppercase;padding:6px 10px;border:2px solid var(--rule-hard);background:#fff;color:var(--ink);min-width:74px;text-align:center;cursor:pointer;border-radius:0}
+.tstat[data-s="doing"]{border-color:var(--md);color:var(--md)}
+.tstat[data-s="done"]{background:var(--lo);border-color:var(--lo);color:#fff}
+.task .tb{flex:1;min-width:0}
+.task .tb b{display:block;font-size:15px;line-height:1.3}
+.task.done .tb b{text-decoration:line-through;color:var(--ink-3)}
+.task .tb .src{display:inline-block;font-family:"Archivo Narrow",sans-serif;font-size:11px;letter-spacing:.03em;text-transform:uppercase;color:var(--ink-3);border:1px solid var(--rule);padding:1px 6px;margin-top:4px}
+.task .tb .tn{width:100%;margin-top:7px;font:inherit;font-size:13px;padding:6px 8px;border:1px solid var(--rule);border-radius:0;background:#fff;color:var(--ink);resize:vertical;min-height:34px}
+.task .tb .tmeta{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink-3);margin-top:4px}
+.task .add{flex:none}
+.suggest{background:#fbfbf8}
+
+/* ---------- reference ---------- */
+.ref section{margin-bottom:26px}
+.ref h4{font-family:"Archivo Narrow",sans-serif;font-size:14.5px;margin:14px 0 4px}
+.ref p{margin:0 0 10px;font-size:14px;line-height:1.55;color:var(--ink-2)}
+.ref ul,.ref ol{margin:0 0 10px;padding-left:20px;font-size:14px;line-height:1.55;color:var(--ink-2)}
+.ref li{margin-bottom:4px}
+.chain-mini{display:flex;flex-wrap:wrap;gap:0;border:1px solid var(--rule);margin-bottom:12px}
+.chain-mini div{flex:1 1 140px;padding:9px 12px;border-right:1px solid var(--rule);font-size:12.5px;color:var(--ink-2)}
+.chain-mini div:last-child{border-right:0}
+.chain-mini b{display:block;font-family:"Archivo Narrow",sans-serif;font-size:13px;color:var(--ink);margin-bottom:2px}
 
 .hide{display:none}
 .foot{margin-top:26px;font-size:12.5px;color:var(--ink-3);line-height:1.55;border-top:1px solid var(--rule);padding-top:12px}
 
 @media print{
   body{background:#fff}
-  .bar,.chain,.audit{display:none}
+  .nav1,.nav2,.audit,.submit-all,.who,.conn{display:none}
   .rbody{display:block}
   .row{break-inside:avoid;border-left-width:3px}
 }
 @media (prefers-color-scheme:dark){
   html,body,.wrap{background:#f2f3f0;color:#16181c}
-  .sheet h1,.sys > h2,.rules h3,.chk h2{color:#16181c}
-  .row,.chain,.rules,.chk,.ref,table.cpt,table.sest,table.sevt,.comments,.submit-all{background:#ffffff}
+  .row,.rules,.panel,.nav1,.submit-all,table.t{background:#ffffff}
   .audit{background:#ffffff}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
@@ -366,181 +234,184 @@ table.sevt td.n{font-family:"IBM Plex Mono",monospace;font-weight:600;white-spac
 <div class="wrap">
 
 <header class="sheet">
-  <h1>944 Track Car<span>Failure modes, effects &amp; control plan</span></h1>
+  <div class="mast">
+    <h1>944 Track Car<span>PFMEA, data log &amp; build tasks</span></h1>
+    <span class="sep"></span>
+    <div class="who">
+      <label for="who">Signed in as <span id="conn" class="conn">○ connecting…</span></label>
+      <input id="who" placeholder="Your name — goes on every row you submit" autocomplete="name">
+    </div>
+  </div>
   <dl class="spec-row">
     <div class="spec"><dt>Chassis</dt><dd>944 Turbo, LS swap</dd></div>
     <div class="spec"><dt>Front end</dt><dd>Rolex Cup</dd></div>
     <div class="spec"><dt>Target</dt><dd class="target">1:35.0 — Laguna Seca</dd></div>
-    <div class="spec"><dt>Pass condition</dt><dd>Car and driver home intact</dd></div>
+    <div class="spec"><dt>Track-ready</dt><dd>Spring 2027 at best</dd></div>
   </dl>
 </header>
 
-<div class="chain">
-  <div class="link"><b>Function</b><p>What the system has to do to get you to 1:35 and back.</p></div>
-  <div class="link"><b>Failure mode</b><p>How it stops doing that. Not the part name — the mechanism.</p></div>
-  <div class="link"><b>Effect &amp; severity</b><p>Worst credible outcome. Rank the outcome, not the one luck gave you.</p></div>
-  <div class="link"><b>Control</b><p>What you check, to what spec, how often, and what you do when it fails.</p></div>
-</div>
+<nav class="nav1" aria-label="Sections">
+  <button data-s="pfmea" aria-pressed="true">PFMEA</button>
+  <button data-s="log" aria-pressed="false">Data log</button>
+  <button data-s="tasks" aria-pressed="false">Task list</button>
+</nav>
 
-<div class="bar">
-  <button id="v-fmea" aria-pressed="true">FMEA</button>
-  <button id="v-cp" aria-pressed="false">Control plan</button>
-  <button id="v-chk" aria-pressed="false">Pre-grid checklist</button>
-  <button id="v-log" aria-pressed="false">Session log</button>
-  <button id="v-ref" aria-pressed="false">Reference guide</button>
-  <button id="f-hi" aria-pressed="false">Needs action only</button>
-  <button id="sort">Group by system</button>
-  <button id="expand">Expand all</button>
-  <span class="sep"></span>
-  <span class="count" id="count"></span>
-  <button id="print">Print</button>
-  <button id="export">⬇ Export JSON</button>
-  <button id="reset">Reset to defaults</button>
-</div>
+<!-- ===== PFMEA ===== -->
+<section id="s-pfmea">
+  <div class="nav2">
+    <button data-v="fmea" aria-pressed="true">FMEA</button>
+    <button data-v="cp" aria-pressed="false">Control plan</button>
+    <button data-v="chk" aria-pressed="false">Pre-grid checklist</button>
+    <button data-v="ref" aria-pressed="false">Reference guide</button>
+    <span class="sep"></span>
+    <span class="count" id="count"></span>
+    <button id="f-hi" aria-pressed="false" class="fmea-only">Needs action only</button>
+    <button id="sort" class="fmea-only">Group by system</button>
+    <button id="expand" class="fmea-only">Expand all</button>
+    <button id="print" class="fmea-only">Print</button>
+    <button id="export" class="fmea-only">⬇ Export JSON</button>
+  </div>
 
-<div class="rules">
-  <h3>Working rules</h3>
-  <ol>
-    <li>Rank by RPN — severity × occurrence × detection. Anything at or above 100 gets an action.</li>
-    <li>Severity gate: any severity 9 or 10 gets an action regardless of RPN. Multiplication hides these.</li>
-    <li>A detection improvement never closes a row. Only a lower severity or lower occurrence does.</li>
-  </ol>
-</div>
-
-<div class="audit" id="audit"></div>
-
-<main id="fmea"></main>
-
-<div class="submit-all" id="submitAll">
-  <div class="info" id="submitAllInfo">No pending score changes.</div>
-  <button type="button" id="submitAllBtn" disabled>Submit all changes</button>
-</div>
-
-<section id="cplan" class="chk hide"></section>
-
-<section id="checklist" class="chk hide"></section>
-
-<section id="seclog" class="chk hide"></section>
-
-<section id="refguide" class="ref hide">
-  <h2>Reference guide</h2>
-  <p class="lede">The methodology this tool runs on. Read this before scoring anything for the first time, or whenever a score change needs a second opinion.</p>
-
-  <section>
-    <h3>The core idea</h3>
-    <p>Process flow → FMEA → control plan is one chain, three views of the same row. Every step in the flow becomes a row in the FMEA. Every failure mode that ranks high enough generates a control that lands in the control plan.</p>
-    <div class="chain-mini">
-      <div><b>Process flow</b>What are the steps?</div>
-      <div><b>FMEA</b>How does each step fail, how bad, how likely, will we catch it?</div>
-      <div><b>Control plan</b>What do we check, to what spec, how often, and what do we do when it fails?</div>
+  <div id="v-fmea">
+    <div class="rules">
+      <h3>Working rules</h3>
+      <ol>
+        <li>Rank by RPN — severity × occurrence × detection. Anything at or above 100 gets an action.</li>
+        <li>Severity gate: any severity 9 or 10 gets an action regardless of RPN. Multiplication hides these.</li>
+        <li>A detection improvement never closes a row. Only a lower severity or lower occurrence does.</li>
+      </ol>
     </div>
-    <p><b>The traceability test</b> — run this before anyone else does: a control in the plan that no FMEA row justifies means asking where it came from; a high-ranked failure mode with no matching control means the chain is broken. Most audit findings live here, not in the arithmetic.</p>
-  </section>
-
-  <section>
-    <h3>Writing rows that hold up</h3>
-    <h4>Failure mode</h4>
-    <p>A mechanism, never a part name or a purchase decision. Not "cheap eBay axle" — that's a purchasing decision. Yes "joint loses clamp load." If a row can be fixed by "buy a better one," it isn't a failure mode yet — keep asking <em>how</em> until you reach something physical.</p>
-    <h4>Effect and severity</h4>
-    <p>Rank the worst credible outcome, not the one that happened. If a failure occurred once and nothing bad came of it, that was luck — luck is not a control. Severity is a property of the effect; it does not change because an inspection was added.</p>
-    <h4>Cause</h4>
-    <p>The mechanism producing the failure mode. One row per cause — if two causes need two different fixes, they're two rows.</p>
-    <h4>Prevention vs. detection</h4>
-    <p>Prevention acts on occurrence — design change, spec change, tooling. Detection acts on detection only — inspection, gauging, test. Prevention wins; detection just tells you the failure already happened.</p>
-  </section>
-
-  <section>
-    <h3>Severity anchors</h3>
-    <div class="sevwrap"><table class="sevt">
-      <thead><tr><th>Score</th><th>Effect</th></tr></thead>
-      <tbody>
-        <tr><td class="n">10</td><td>Safety consequence without warning</td></tr>
-        <tr><td class="n">9</td><td>Safety consequence with warning</td></tr>
-        <tr><td class="n">7–8</td><td>Loss of primary function — DNF</td></tr>
-        <tr><td class="n">4–6</td><td>Degraded function — costs lap time</td></tr>
-        <tr><td class="n">1–3</td><td>Minor or annoying</td></tr>
-      </tbody>
-    </table></div>
-  </section>
-
-  <section>
-    <h3>Scoring — RPN with two rules</h3>
-    <p><b>RPN = Severity × Occurrence × Detection.</b> Action threshold: RPN ≥ 100. It's the language most teams and suppliers speak, and it sorts a long list acceptably fast — but it has two known holes, patched here with explicit rules rather than judgment calls.</p>
-    <h4>Rule 1 — severity gate</h4>
-    <p>Any severity 9 or 10 gets an action regardless of RPN. Multiplication lets a low factor cancel a high one: severity 10 × occurrence 2 × detection 2 = RPN 40, reading as trivial — but the effect is still a safety event.</p>
-    <h4>Rule 2 — detection never closes a row</h4>
-    <p>Only a reduction in severity or occurrence closes an action. Improving detection from 8 to 3 cuts RPN by more than half while changing nothing about the process — the failure is exactly as likely and exactly as bad, you just got better at watching it happen.</p>
-    <h4>Why these exist</h4>
-    <p>AIAG-VDA 2019 replaced RPN with Action Priority (AP) — a lookup table where severity dominates and detection can't rescue a high-severity, high-occurrence row. The two rules above reproduce AP's protection while keeping RPN's familiar language. Any supplier under IATF 16949 is likely scoring in AP — read theirs that way.</p>
-  </section>
-
-  <section>
-    <h3>Justifying a score change</h3>
-    <p>Every S/O/D edit in this tool requires a reason before it saves, and that reason is kept permanently in the row's change history — visible to anyone who opens this browser's copy later. A good reason names what changed in the real world, not just that you disagree: "confirmed with a torque wrench on three flange bolts, all held" beats "lowering this, feels fine now."</p>
-  </section>
-
-  <section>
-    <h3>Common findings, in order of frequency</h3>
-    <ol>
-      <li>A control in the plan with no FMEA row behind it, or a high-risk row with no control</li>
-      <li>Actions closed by improving detection alone</li>
-      <li>Severity lowered because an inspection was added</li>
-      <li>Failure modes written as part names or purchasing decisions</li>
-      <li>Reaction plan missing, vague, or with no containment scope</li>
-      <li>Document not updated after a real failure or a process change</li>
-    </ol>
-  </section>
+    <div class="audit" id="audit"></div>
+    <main id="fmea"></main>
+    <div class="submit-all" id="submitAll">
+      <div class="info" id="submitAllInfo">No pending score changes.</div>
+      <button type="button" id="submitAllBtn" disabled>Submit all changes</button>
+    </div>
+  </div>
+  <div id="v-cp" class="panel hide"></div>
+  <div id="v-chk" class="panel hide"></div>
+  <div id="v-ref" class="panel ref hide">
+    <h2>Reference guide</h2>
+    <p class="lede">The methodology this tool runs on. Read this before scoring anything for the first time, or whenever a score change needs a second opinion.</p>
+    <section>
+      <h3>The core idea</h3>
+      <p>Process flow → FMEA → control plan is one chain, three views of the same row. Every step in the flow becomes a row in the FMEA. Every failure mode that ranks high enough generates a control that lands in the control plan.</p>
+      <div class="chain-mini">
+        <div><b>Process flow</b>What are the steps?</div>
+        <div><b>FMEA</b>How does each step fail, how bad, how likely, will we catch it?</div>
+        <div><b>Control plan</b>What do we check, to what spec, how often, and what do we do when it fails?</div>
+      </div>
+      <p><b>The traceability test</b> — a control in the plan that no FMEA row justifies means asking where it came from; a high-ranked failure mode with no matching control means the chain is broken. Most audit findings live here, not in the arithmetic.</p>
+    </section>
+    <section>
+      <h3>Writing rows that hold up</h3>
+      <h4>Failure mode</h4>
+      <p>A mechanism, never a part name or a purchase decision. Not "cheap eBay axle" — that's a purchasing decision. Yes "joint loses clamp load." If a row can be fixed by "buy a better one," it isn't a failure mode yet — keep asking <em>how</em> until you reach something physical.</p>
+      <h4>Effect and severity</h4>
+      <p>Rank the worst credible outcome, not the one that happened. If a failure occurred once and nothing bad came of it, that was luck — luck is not a control. Severity is a property of the effect; it does not change because an inspection was added.</p>
+      <h4>Cause</h4>
+      <p>The mechanism producing the failure mode. One row per cause — if two causes need two different fixes, they're two rows.</p>
+      <h4>Prevention vs. detection</h4>
+      <p>Prevention acts on occurrence — design change, spec change, tooling. Detection acts on detection only — inspection, gauging, test. Prevention wins; detection just tells you the failure already happened.</p>
+    </section>
+    <section>
+      <h3>Severity anchors</h3>
+      <div class="tw"><table class="t" style="min-width:420px">
+        <thead><tr><th>Score</th><th>Effect</th></tr></thead>
+        <tbody>
+          <tr><td class="n">10</td><td>Safety consequence without warning</td></tr>
+          <tr><td class="n">9</td><td>Safety consequence with warning</td></tr>
+          <tr><td class="n">7–8</td><td>Loss of primary function — DNF</td></tr>
+          <tr><td class="n">4–6</td><td>Degraded function — costs lap time</td></tr>
+          <tr><td class="n">1–3</td><td>Minor or annoying</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+    <section>
+      <h3>Scoring — RPN with two rules</h3>
+      <p><b>RPN = Severity × Occurrence × Detection.</b> Action threshold: RPN ≥ 100. It's the language most teams and suppliers speak — but it has two known holes, patched here with explicit rules rather than judgment calls.</p>
+      <h4>Rule 1 — severity gate</h4>
+      <p>Any severity 9 or 10 gets an action regardless of RPN. Multiplication lets a low factor cancel a high one: severity 10 × occurrence 2 × detection 2 = RPN 40, reading as trivial — but the effect is still a safety event.</p>
+      <h4>Rule 2 — detection never closes a row</h4>
+      <p>Only a reduction in severity or occurrence closes an action. Improving detection from 8 to 3 cuts RPN by more than half while changing nothing about the process — the failure is exactly as likely and exactly as bad.</p>
+      <h4>Why these exist</h4>
+      <p>AIAG-VDA 2019 replaced RPN with Action Priority (AP) — a lookup table where severity dominates and detection can't rescue a high-severity, high-occurrence row. The two rules above reproduce AP's protection while keeping RPN's familiar language.</p>
+    </section>
+    <section>
+      <h3>Justifying a score change</h3>
+      <p>Every S/O/D edit requires a reason before it submits, and every accepted change is logged permanently with who made it and why. A good reason names what changed in the real world, not just that you disagree: "confirmed with a torque wrench on three flange bolts, all held" beats "lowering this, feels fine now."</p>
+    </section>
+    <section>
+      <h3>Common findings, in order of frequency</h3>
+      <ol>
+        <li>A control in the plan with no FMEA row behind it, or a high-risk row with no control</li>
+        <li>Actions closed by improving detection alone</li>
+        <li>Severity lowered because an inspection was added</li>
+        <li>Failure modes written as part names or purchasing decisions</li>
+        <li>Reaction plan missing, vague, or with no containment scope</li>
+        <li>Document not updated after a real failure or a process change</li>
+      </ol>
+    </section>
+  </div>
 </section>
 
-<section class="comments" id="comments">
-  <h2>Shane know's I'm a moron so input comments here</h2>
-  <p>Banked to this browser — say what's wrong, what's missing, or what should change.</p>
-  <div class="cbox">
-    <input type="text" id="c-name" placeholder="Name (optional)">
-    <textarea id="c-text" placeholder="Type a comment..."></textarea>
-    <button id="c-post">Post comment</button>
+<!-- ===== DATA LOG ===== -->
+<section id="s-log" class="hide">
+  <div class="nav2">
+    <button data-v="changes" aria-pressed="true">Score changes</button>
+    <button data-v="sessions" aria-pressed="false">Sessions</button>
+    <button data-v="comments" aria-pressed="false">Comments</button>
+    <span class="sep"></span>
+    <button id="refresh">↻ Refresh from Sheet</button>
   </div>
-  <div class="clist" id="c-list"></div>
-  <button id="export-comments" style="margin-top:14px">⬇ Export comments</button>
+  <div id="v-changes" class="panel"></div>
+  <div id="v-sessions" class="panel hide"></div>
+  <div id="v-comments" class="panel hide"></div>
+</section>
+
+<!-- ===== TASKS ===== -->
+<section id="s-tasks" class="hide">
+  <div id="v-tasks" class="panel"></div>
 </section>
 
 <p class="foot">
-  Ranking runs on RPN — severity × occurrence × detection — with an action threshold of 100.
-  The two working rules above patch the holes multiplication leaves: a severity gate catches rows RPN buries,
-  and a detection-only improvement is flagged rather than allowed to close a row. Action Priority from the
-  AIAG-VDA 2019 handbook is still shown small under each RPN for reference; it is a simplified form of the
-  published table. Suppliers shipping under IATF 16949 are held to AP, so expect it on anything they send you.
-  Blank S/O/D means you haven't ranked it yet. Editing a score requires a written reason; nothing
-  saves until you hit Submit all changes at the bottom of this list, which logs every changed row's
-  reason to its permanent change history in one action. Saved data lives in this browser
-  (localStorage) and reloads with the page — it does not sync anywhere else, so export JSON for a
-  portable copy or before switching browsers. Reset to defaults clears saved edits and change
-  history and restores the built-in rows.
+  Ranking runs on RPN — severity × occurrence × detection — with an action threshold of 100. The two working
+  rules patch the holes multiplication leaves: a severity gate catches rows RPN buries, and a detection-only
+  improvement is flagged rather than allowed to close a row. Action Priority (AIAG-VDA 2019) is shown small
+  under each RPN for reference; it is a simplified form of the published table.
+  Every submission — score changes, checklist runs, comments, task updates — is appended to a shared Google
+  Sheet, which is the system of record; this page rebuilds its state from that log on every load. If the Sheet
+  is unreachable, the page shows the last copy it saw and queues anything you submit until it reconnects.
 </p>
 
 </div>
 <script>
+/* =========================================================================
+   Static reference content. Scores, history, sessions, comments and tasks
+   all come from the Sheet; only the row TEXT lives here.
+   ========================================================================= */
+const SHEETS_URL = "https://script.google.com/macros/s/AKfycbx3E0ELFl6unOhV7hJ1dYmYKZYyzDw44C1uidczkppt4iW5-8NHYtiM-dp6fY-JdStI/exec";
+
 const ROWS = [
  {
   sys:"Drivetrain", fn:"Transmit torque to the left rear wheel through suspension travel and steering-free articulation",
   fm:"Rear CV joint loses internal geometry — balls brinell the races, cage cracks, joint will not reassemble",
   eff:"Loss of drive. Joint can bind or separate; a separated shaft flails into brake lines, fuel lines or bodywork",
-  S:9,
+  S:9, O:6, D:5,
   cause:"Operating angle at lowered ride height exceeds joint rating; grease overheats and sheds; unknown-supplier joint with no cert",
-  O:6, D:5,
   prev:"Known-brand joint of adequate rating. Measure static CV angle at ride height and compare to the joint's rated angle before install",
   det:"Boot condition and grease colour checked each session — a split boot precedes the failure by a long margin",
   ch:"CV boot integrity and grease condition", spec:"Boot uncut and unsplit; grease light-coloured, not dark or gritty",
   method:"Visual, wheel off or through the wheel", samp:"100%, every session",
-  rx:"Split boot or dark gritty grease → do not grid. Pull the joint, inspect races for indentation, repack or replace"
+  rx:"Split boot or dark gritty grease → do not grid. Pull the joint, inspect races for indentation, repack or replace",
+  task:"Measure static CV angle at final ride height and compare against the joint's rated angle"
  },
  {
   sys:"Drivetrain", fn:"Maintain clamp load at the axle-to-hub flange joint",
   fm:"Flange bolt joint loses clamp load",
   eff:"Micro-motion at the joint face → fretting at the bolt holes → fatigue crack that presents later as a 'snapped' shaft",
-  S:9,
+  S:9, O:5, D:4,
   cause:"Joint separated at the flange instead of dropping the trailing arm, so it is opened and re-closed often. No re-torque interval, no thread retention, dirty joint faces",
-  O:5, D:4,
   prev:"New hardware or fresh threadlocker each assembly. Clean and dry both faces. Torque to spec with a calibrated wrench",
   det:"Paint witness stripe across each bolt head onto the flange — a five-second visual on a joint you can't easily reach",
   ch:"CV flange bolt torque", spec:"Manufacturer torque spec for the flange hardware",
@@ -551,9 +422,8 @@ const ROWS = [
   sys:"Drivetrain", fn:"Carry peak driveline torque including transient shock loads",
   fm:"Axle shaft fractures",
   eff:"Immediate loss of drive; shaft end flails. Under power on corner exit this can take out a brake line or induce sudden yaw",
-  S:9,
+  S:9, O:4, D:3,
   cause:"Shock loading — inside rear unloads over a curb and re-plants, wheel hop under trail braking — multiplies engine torque well past the 944's original ~217 hp design case",
-  O:4, D:3,
   prev:"Upgraded shaft rated for the LS torque case, or a deliberately chosen weak link you can replace cheaply",
   det:"Fracture face reading after any failure: beach marks = fatigue, flat and crystalline = brittle overload, cup-and-cone with twist = ductile overload",
   ch:"Shaft rating vs. applied torque case", spec:"Shaft rated above peak shock load, not above peak flywheel torque",
@@ -564,22 +434,21 @@ const ROWS = [
   sys:"Engine", fn:"Maintain oil pressure through sustained lateral load",
   fm:"Oil pickup uncovered under sustained lateral G",
   eff:"Bearing starvation → spun bearing → engine out and oil on track. At Laguna this is the Corkscrew and everyone behind you",
-  S:10,
+  S:10, O:6, D:6,
   cause:"Stock LS pan baffling designed for straight-line duty. Turn 6 is a long sustained left; the Corkscrew unloads the car completely",
-  O:6, D:6,
   prev:"Baffled or kickout pan, windage tray, or accusump. This is a design control — fix it once, in the build",
   det:"Logged oil pressure trace reviewed after every session. The dash light tells you the motor is already gone",
   ch:"Oil level, cold, on level ground", spec:"Your pan's measured full mark — not the factory dipstick",
   method:"Dipstick plus review of last session's logged pressure trace", samp:"100%, every session",
-  rx:"Any pressure dip in the trace → no-go. Do not grid until the cause is found"
+  rx:"Any pressure dip in the trace → no-go. Do not grid until the cause is found",
+  task:"Decide and fit the oil-control solution: baffled/kickout pan, windage tray, or accusump"
  },
  {
   sys:"Brakes", fn:"Contain hydraulic pressure from the dual master to each corner without loss",
   fm:"Hard line flare joint leaks — seat does not seal against the fitting",
   eff:"Progressive fluid loss, then a long or bottomed pedal. Worst case is the end of the front straight into Turn 2, with a circuit already down and no reserve travel",
-  S:10,
+  S:10, O:8, D:2,
   cause:"Flare profile does not match the seat. A 944's native lines are metric ISO/bubble flare; most US masters take SAE 45° inverted double flare. Mixing the two never seals at any torque. Second candidate: a single flare where a double is required — it cracks. Third: cheap clamp-style flaring tool producing off-centre or split flares",
-  O:8, D:2,
   prev:"Confirm the port standard on the master before cutting a single line, then flare to match. Double flare for SAE 45°, never single. Use a hydraulic or turret-style flaring tool, not a clamp-and-cone kit. Adapters where standards genuinely change, not a torque wrench",
   det:"Pressure hold test with a pedal depressor and dry paper towel wrapped at each joint. Visual alone misses a weep",
   ch:"Every flare joint — seal integrity under pressure (special characteristic — safety)",
@@ -587,6 +456,7 @@ const ROWS = [
   method:"Pedal depressor at working pressure held 15+ minutes, paper towel witness at each fitting; reservoir level marked and re-checked",
   samp:"100% of joints at build, every joint visually each session",
   rx:"Any dampness → car does not move. Do not re-torque to chase a leak — an over-torqued seat is deformed permanently. Cut the flare off, verify the profile against the port, re-flare, re-test",
+  task:"Pressure-hold test every flare joint (pedal depressor, 15+ min, paper-towel witness) before the car moves under its own power",
   evidence:[
    {date:"2026-09-05", text:"Porsche Sprint Challenge USA West race at Laguna Seca — driver lost brakes entering the Zanardi Corkscrew, went airborne, cleared the tire pack, and tore through the catch fence into the trees. Front suspension separated from the chassis on impact; driver airlifted to hospital, reported awake and being treated. Not this car or team, but the exact failure mode and exact corner this row already flags at severity 10.", url:"https://racingnews.co/2026/09/05/laguna-seca-driver-jumps-corkscrew-turn-lands-in-trees-video/"}
   ]
@@ -595,30 +465,31 @@ const ROWS = [
   sys:"Cooling", fn:"Reject enough heat to hold coolant and oil temperature over a full 20-minute session",
   fm:"Coolant temperature climbs past limit and keeps climbing — no plateau",
   eff:"Detonation, then head gasket or worse. On an untuned LS this arrives faster than on a stock engine, and the first sign may be damage rather than a gauge reading",
-  S:9,
+  S:9, O:7, D:4,
   cause:"LS heat rejection exceeds what the 944 core and duct path were sized for. Usual mechanisms: air not actually passing through the core (recirculation around an unsealed shroud), trapped air from an incomplete fill on a system with high points, or fan control that never commands on at track duty cycle",
-  O:7, D:4,
   prev:"Seal the perimeter so air must pass through the core, not around it. Bleed to a documented procedure. Set fan-on threshold for track use, not street",
   det:"Log coolant in and out plus oil temp for a full session. The number that matters is the delta across the radiator and whether temperature plateaus or keeps climbing",
   ch:"Coolant temperature rise across a session, and delta across the radiator",
   spec:"Temperature reaches a plateau and holds. A steady climb with no plateau fails regardless of the peak number",
   method:"Logged inlet and outlet temps over a full 20-minute session at pace, reviewed after",
   samp:"Every session until three consecutive sessions plateau, then every event",
-  rx:"No plateau → session over, cool down on track before pitting. Do not validate a cooling change on a short session — a system that fails at minute 18 passes a 6-minute test"
+  rx:"No plateau → session over, cool down on track before pitting. Do not validate a cooling change on a short session — a system that fails at minute 18 passes a 6-minute test",
+  task:"Seal the radiator shroud perimeter, write the bleed procedure, set the fan-on threshold for track duty"
  },
  {
   sys:"Fuel", fn:"Report fuel pressure to the ECU so a drop can be acted on before damage",
-  fm:"Fuel pressure not monitored — no signal to the Haltech",
+  fm:"Fuel pressure not monitored — no confirmed signal into the Haltech",
   eff:"A pressure drop goes undetected. On an untuned LS that is lean-out under sustained load, detonation, and a melted piston. With nothing logged, the post-mortem cannot separate a fuel problem from a tune problem",
   S:9, O:6, D:8,
-  cause:"Pressure is read only on the mechanical gauge at the Aeromotive regulator. No sensor fitted, or fitted but not wired to an analog input",
+  cause:"Pressure is read only on the mechanical gauge at the Aeromotive regulator. A sensor and a wire labeled FUEL PRESS exist at the regulator, but nobody has yet confirmed in NSP that either Rebel-LS AVI channel is assigned and reading it",
   prev:"The sensor alone is not the fix — configure a low-pressure safety cut in the Haltech so the ECU pulls timing or cuts before damage. That converts a detection-only control into real prevention",
   det:"Logged pressure trace reviewed after every session. A mechanical gauge you cannot see at speed is barely a control, which is what the detection score reflects",
   ch:"Fuel pressure, logged, across the full session",
   spec:"Holds regulator target under sustained load; no dips under lateral G or braking",
   method:"Pressure sensor on an ECU analog input, logged, with a configured low-pressure limit",
   samp:"Continuous logging, reviewed 100% of sessions",
-  rx:"Any dip below limit → session over. Do not re-run until the cause is found — a repeat is a spun bearing away from an engine"
+  rx:"Any dip below limit → session over. Do not re-run until the cause is found — a repeat is a spun bearing away from an engine",
+  task:"Confirm in NSP which Rebel-LS AVI the FUEL PRESS wire lands on, scale it, and configure the low-pressure cut"
  },
  {
   sys:"Fuel", fn:"Deliver fuel without interruption under sustained lateral and braking load",
@@ -632,7 +503,8 @@ const ROWS = [
   spec:"Documented minimum — set above the level where the pickup uncovers under sustained G, not above empty",
   method:"Measured fill and logged consumption per session; level sender once fitted",
   samp:"100%, every session",
-  rx:"Below minimum → do not grid, add fuel. Never run a session down to reserve to save a splash of fuel"
+  rx:"Below minimum → do not grid, add fuel. Never run a session down to reserve to save a splash of fuel",
+  task:"Fit a fuel level sender to the ECU; decide surge tank vs. baffled pickup"
  },
  {
   sys:"Suspension", fn:"Maintain intended tire contact patch and consistent handling balance through the corner",
@@ -646,7 +518,8 @@ const ROWS = [
   spec:"Documented target sheet. Not 'factory', not 'straight'",
   method:"Alignment rack at target ride height, driver weight or ballast in seat",
   samp:"After any suspension change, and after any off",
-  rx:"No defined spec → do not align yet, write the spec first. Out of spec → no track use until corrected"
+  rx:"No defined spec → do not align yet, write the spec first. Out of spec → no track use until corrected",
+  task:"Write the alignment target sheet (camber/toe/caster for the chosen tire), set ride height, then align"
  },
  {
   sys:"Suspension", fn:"Provide known, repeatable grip so the car and the driver can be developed against a baseline",
@@ -660,225 +533,183 @@ const ROWS = [
   spec:"Selected compound and size, with hot pressure targets recorded",
   method:"Documented at selection; hot pressures taken after each session",
   samp:"Every session once running",
-  rx:"Wear pattern away from target → revisit camber before changing anything else"
+  rx:"Wear pattern away from target → revisit camber before changing anything else",
+  task:"Select the tire (compound and size) — this unblocks the alignment spec"
  },
  {
   sys:"Driver safety", fn:"Restrain the driver in an impact",
   fm:"Harness webbing or mounting degrades",
   eff:"", S:null, O:null, D:null,
   cause:"", prev:"", det:"",
-  ch:"", spec:"", method:"", samp:"", rx:"", todo:true
+  ch:"", spec:"", method:"", samp:"", rx:"", todo:true,
+  task:"Rank the harness row (S/O/D), write its effect, and define a control — it's the only unranked row"
  }
 ];
 
-const ORIGINAL_ROWS = JSON.parse(JSON.stringify(ROWS));
-const STORAGE_KEY = "944-fmea-rows-v1";
+// Standalone suggested tasks that aren't tied to an FMEA row.
+const SEED_TASKS = [
+  { taskId:"seed-eps", title:"Decide: electric power steering pump and/or a different rack — and check whether the Haltech Nexus Rebel-LS exposes any feedback channel that would help", source:"comment · 2026-09-10" }
+];
 
-function loadSaved(){
+/* =========================================================================
+   Sheet client — reads with cache fallback, writes with an offline outbox
+   ========================================================================= */
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const ls={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+let ONLINE=null; // null=unknown, true, false
+
+function setConn(state,extra){
+  const el=$("#conn"); ONLINE=state;
+  el.className="conn "+(state===true?"live":state===false?"off":"");
+  el.textContent=state===true?"● live":state===false?"○ offline"+(extra?" · "+extra:""):"○ connecting…";
+  el.title=state===true?"Reading and writing the shared Google Sheet":state===false?"Sheet unreachable — showing the last copy seen; submissions are queued":"";
+}
+
+let LAST_FETCH_OK=false;
+async function sheetGet(tab){
   try{
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if(!raw) return;
-    const saved = JSON.parse(raw);
-    saved.forEach((s,i)=>{ if(ROWS[i]) Object.assign(ROWS[i], s); });
-  }catch(e){ /* corrupt or unavailable storage — fall back to defaults */ }
+    const r=await fetch(`${SHEETS_URL}?sheet=${encodeURIComponent(tab)}`,{cache:"no-store"});
+    const data=await r.json();
+    if(!Array.isArray(data.rows)) throw new Error(data.error||"bad response");
+    ls.set("sheet:"+tab,{at:Date.now(),rows:data.rows});
+    LAST_FETCH_OK=true;
+    return data.rows;
+  }catch(e){
+    LAST_FETCH_OK=false;
+    const c=ls.get("sheet:"+tab,null);
+    if(c) return c.rows;
+    throw e;
+  }
 }
-function saveRows(){
-  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(ROWS)); }
-  catch(e){ /* storage unavailable — edits stay in-memory only */ }
-}
-loadSaved();
 
-const SESSIONS_KEY = "944-fmea-sessions-v1";
-function loadSessions(){
-  try{ return JSON.parse(localStorage.getItem(SESSIONS_KEY)) || []; }
-  catch(e){ return []; }
+async function sheetPost(tab,rows){
+  // Apps Script's POST reply isn't readable cross-origin (no-cors), but the write lands.
+  // A resolved fetch = the request left the browser; failures go to the outbox.
+  const payload={sheet:tab,rows};
+  try{
+    await fetch(SHEETS_URL,{method:"POST",mode:"no-cors",body:JSON.stringify(payload)});
+    return true;
+  }catch(e){
+    const box=ls.get("outbox",[]); box.push(payload); ls.set("outbox",box);
+    return false;
+  }
 }
-function saveSessions(){
-  try{ localStorage.setItem(SESSIONS_KEY, JSON.stringify(SESSIONS)); }
-  catch(e){ /* storage unavailable */ }
-}
-let SESSIONS = loadSessions();
-let DRAFT = {}; // in-progress checklist responses, keyed by characteristic text
 
-const COMMENTS_KEY = "944-fmea-comments-v1";
-function loadComments(){
-  try{ return JSON.parse(localStorage.getItem(COMMENTS_KEY)) || []; }
-  catch(e){ return []; }
+async function flushOutbox(){
+  const box=ls.get("outbox",[]);
+  if(!box.length) return 0;
+  let sent=0;
+  for(const p of box.slice()){
+    try{ await fetch(SHEETS_URL,{method:"POST",mode:"no-cors",body:JSON.stringify(p)}); box.shift(); sent++; }
+    catch(e){ break; }
+  }
+  ls.set("outbox",box);
+  return sent;
 }
-function saveComments(){
-  try{ localStorage.setItem(COMMENTS_KEY, JSON.stringify(COMMENTS)); }
-  catch(e){ /* storage unavailable */ }
-}
-let COMMENTS = loadComments();
 
-/* Simplified AIAG-VDA Action Priority. Severity dominates; detection never rescues
-   a high-severity, high-occurrence row. Verify against the published table for audit use. */
+const who=()=>($("#who").value||"").trim();
+function requireWho(msgEl){
+  if(who()) { $("#who").classList.remove("need"); return true; }
+  $("#who").classList.add("need"); $("#who").focus();
+  if(msgEl){ msgEl.className="msg err"; msgEl.textContent="Put your name in 'Signed in as' first — it goes on every row you submit."; }
+  return false;
+}
+$("#who").value=ls.get("fmea-who","");
+$("#who").addEventListener("input",()=>{ ls.set("fmea-who",who()); if(who()) $("#who").classList.remove("need"); });
+
+/* =========================================================================
+   Derived state from the Sheet
+   ========================================================================= */
+let CHANGES=[], SESSIONS=[], COMMENTS=[], TASKEVENTS=[];
+const num=v=>(v===""||v==null)?null:Number(v);
+
+function applyChanges(){
+  // Reset to defaults, then replay the log in time order.
+  ROWS.forEach((r,i)=>{ r.S=DEFAULTS[i].S; r.O=DEFAULTS[i].O; r.D=DEFAULTS[i].D; r.history=[]; });
+  [...CHANGES].sort((a,b)=>Number(a.ts)-Number(b.ts)).forEach(c=>{
+    const r=ROWS[Number(c.rowIndex)]; if(!r) return;
+    r.S=num(c.toS); r.O=num(c.toO); r.D=num(c.toD);
+    r.history.push({ts:Number(c.ts),reason:c.reason,who:c.who,from:{S:num(c.fromS),O:num(c.fromO),D:num(c.fromD)},to:{S:r.S,O:r.O,D:r.D}});
+  });
+  ROWS.forEach(r=>{ r._synced={S:r.S,O:r.O,D:r.D}; });
+}
+const DEFAULTS=ROWS.map(r=>({S:r.S,O:r.O,D:r.D}));
+
+function groupedSessions(){
+  const by=new Map();
+  SESSIONS.forEach(e=>{
+    const k=String(e.ts);
+    if(!by.has(k)) by.set(k,{ts:Number(e.ts),date:e.sessionDate,note:e.sessionNote,who:e.who,entries:[]});
+    by.get(k).entries.push({sys:e.sys,ch:e.characteristic,status:e.status,note:e.itemNote});
+  });
+  return [...by.values()].sort((a,b)=>b.ts-a.ts);
+}
+
+function taskState(){
+  // Latest event per taskId wins.
+  const latest=new Map();
+  [...TASKEVENTS].sort((a,b)=>Number(a.ts)-Number(b.ts)).forEach(e=>latest.set(e.taskId,e));
+  const known=[...latest.values()].map(e=>({taskId:e.taskId,title:e.title,source:e.source,status:e.status||"todo",notes:e.notes||"",who:e.who,ts:Number(e.ts)}));
+  const knownIds=new Set(known.map(t=>t.taskId));
+  const suggested=[];
+  ROWS.forEach((r,i)=>{ if(r.task && !knownIds.has("fmea-"+i)) suggested.push({taskId:"fmea-"+i,title:r.task,source:`FMEA row · ${r.sys}`}); });
+  SEED_TASKS.forEach(t=>{ if(!knownIds.has(t.taskId)) suggested.push(t); });
+  const order={doing:0,todo:1,done:2};
+  known.sort((a,b)=>(order[a.status]??1)-(order[b.status]??1)||b.ts-a.ts);
+  return {known,suggested};
+}
+
+/* =========================================================================
+   Scoring
+   ========================================================================= */
 function ap(S,O,D){
   if(!S||!O||!D) return "?";
-  if(S>=9){
-    if(O>=4) return "H";
-    if(O>=2) return D>=5?"H":"M";
-    return D>=7?"M":"L";
-  }
-  if(S>=7){
-    if(O>=6) return "H";
-    if(O>=4) return D>=5?"H":"M";
-    if(O>=2) return D>=7?"M":"L";
-    return "L";
-  }
-  if(S>=4){
-    if(O>=7) return D>=5?"H":"M";
-    if(O>=4) return D>=7?"M":"L";
-    return "L";
-  }
+  if(S>=9){ if(O>=4) return "H"; if(O>=2) return D>=5?"H":"M"; return D>=7?"M":"L"; }
+  if(S>=7){ if(O>=6) return "H"; if(O>=4) return D>=5?"H":"M"; if(O>=2) return D>=7?"M":"L"; return "L"; }
+  if(S>=4){ if(O>=7) return D>=5?"H":"M"; if(O>=4) return D>=7?"M":"L"; return "L"; }
   return O>=8&&D>=7?"M":"L";
 }
-
-function rpn(S,O,D){ return (!S||!O||!D) ? null : S*O*D; }
-
-const RPN_THRESHOLD = 100;
-
-/* Rule 1 — severity gate. Sev 9-10 gets an action regardless of RPN.
-   This is the one thing RPN's multiplication can hide. */
+const rpn=(S,O,D)=>(!S||!O||!D)?null:S*O*D;
+const RPN_THRESHOLD=100;
 function gated(S,O,D){
-  const n=rpn(S,O,D);
-  if(n===null) return null;
-  if(S>=9 && n<RPN_THRESHOLD){
-    return `RPN ${n} is under the ${RPN_THRESHOLD} threshold, but severity ${S} triggers the gate. This row needs an action anyway — multiplication is hiding a ${S===10?"catastrophic":"severe"} outcome behind low occurrence and good detection.`;
-  }
+  const n=rpn(S,O,D); if(n===null) return null;
+  if(S>=9&&n<RPN_THRESHOLD) return `RPN ${n} is under the ${RPN_THRESHOLD} threshold, but severity ${S} triggers the gate. This row needs an action anyway — multiplication is hiding a ${S===10?"catastrophic":"severe"} outcome behind low occurrence and good detection.`;
   return null;
 }
+const needsAction=(S,O,D)=>{const n=rpn(S,O,D);return n!==null&&(n>=RPN_THRESHOLD||S>=9)};
+function isDirty(r){const s=r._synced||{S:r.S,O:r.O,D:r.D};return r.S!==s.S||r.O!==s.O||r.D!==s.D}
+const pendingChanges=()=>ROWS.map((r,i)=>({i,r})).filter(({r})=>isDirty(r));
 
-function needsAction(S,O,D){
-  const n=rpn(S,O,D);
-  if(n===null) return false;
-  return n>=RPN_THRESHOLD || S>=9;
-}
-
-/* Rule 2 — you cannot close a row by improving detection. Capture the
-   last-saved S/O/D, then warn if D drops while S and O sit still. */
-ROWS.forEach(r=>{ r._synced={S:r.S,O:r.O,D:r.D}; });
-
-function flagDetectionClose(row,r){
-  const b=r._synced;
-  let el=row.querySelector(".det-note");
-  const cheated = b.D && r.D && r.D < b.D && r.S===b.S && r.O===b.O;
-  if(cheated){
-    const before=rpn(b.S,b.O,b.D), after=rpn(r.S,r.O,r.D);
-    if(!el){
-      el=document.createElement("div");
-      el.className="gate-note det-note";
-      row.querySelector(".sod").after(el);
-    }
-    el.innerHTML=`<b>Detection-only improvement — does not close the row</b>RPN fell from ${before} to ${after}, but severity and occurrence are unchanged. Nothing about the failure got less likely or less bad — you only got better at watching it happen. Log the improved detection, keep the action open.`;
-  } else if(el){ el.remove(); }
-}
-
-const $=s=>document.querySelector(s);
-let hiOnly=false, allOpen=false, view="fmea", byRpn=true;
-
-function f(k,v){
-  return `<div class="field"><div class="k">${k}</div><div class="v${v?"":" empty"}">${v||"Not filled in yet — this one is yours"}</div></div>`;
-}
-
-function esc(s){
-  return String(s).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
-}
-
-function evidenceHtml(r){
-  if(!r.evidence||!r.evidence.length) return "";
-  return `<div class="evid"><div class="evid-title">Supporting evidence</div>${r.evidence.map(e=>`
-    <div class="evid-entry">
-      <div class="evid-entry-meta">${esc(e.date)}</div>
-      <div class="evid-entry-text">${esc(e.text)}</div>
-      ${e.url?`<a class="evid-entry-link" href="${esc(e.url)}" target="_blank" rel="noopener noreferrer">Source ↗</a>`:""}
-    </div>`).join("")}</div>`;
-}
-function historyEntryHtml(h){
-  return `<div class="chg-entry">
-    <div class="chg-entry-meta">${esc(new Date(h.ts).toLocaleString())} — S ${h.from.S??"–"}→${h.to.S??"–"}, O ${h.from.O??"–"}→${h.to.O??"–"}, D ${h.from.D??"–"}→${h.to.D??"–"}</div>
-    <div class="chg-entry-reason">${esc(h.reason)}</div>
-  </div>`;
-}
-function historyHtml(r){
-  if(!r.history||!r.history.length) return "";
-  return `<div class="chg-history"><div class="chg-history-title">Change history</div>${[...r.history].reverse().map(historyEntryHtml).join("")}</div>`;
-}
-let CHANGE_DRAFT = {}; // pending, not-yet-submitted reason text, keyed by row index
-
-function isDirty(r){
-  const s=r._synced||{S:r.S,O:r.O,D:r.D};
-  return r.S!==s.S||r.O!==s.O||r.D!==s.D;
-}
-function pendingChanges(){
-  return ROWS.map((r,i)=>({i,r})).filter(({r})=>isDirty(r));
-}
-let submitConfirmTimer=null;
-function showSubmitConfirmation(text){
-  const info=$("#submitAllInfo");
-  if(!info) return;
-  info.innerHTML=text;
-  info.dataset.confirming="1";
-  clearTimeout(submitConfirmTimer);
-  submitConfirmTimer=setTimeout(()=>{
-    delete info.dataset.confirming;
-    updateSubmitAll();
-  }, 5000);
-}
-function updateSubmitAll(){
-  const bar=$("#submitAll");
-  if(!bar) return;
-  const info=$("#submitAllInfo"), btn=$("#submitAllBtn");
-  if(info.dataset.confirming) return;
-  const pending=pendingChanges();
-  if(!pending.length){
-    info.innerHTML="No pending score changes.";
-    btn.disabled=true;
-    return;
-  }
-  const missing=pending.filter(({i})=>!(CHANGE_DRAFT[i]&&CHANGE_DRAFT[i].trim()));
-  if(missing.length){
-    info.innerHTML=`<b>${pending.length} score${pending.length>1?"s":""} changed</b><span class="missing">${missing.length} still need${missing.length===1?"s":""} a reason before you can submit: ${missing.map(({r})=>esc(r.fm)).join(", ")}</span>`;
-    btn.disabled=true;
-  } else {
-    info.innerHTML=`<b>${pending.length} change${pending.length>1?"s":""} ready</b>Every changed score has a reason. Submit to log ${pending.length>1?"them":"it"}.`;
-    btn.disabled=false;
-  }
-}
-function updateChangeGate(row,r){
-  const sod=row.querySelector(".sod");
-  if(sod) sod.classList.toggle("dirty",isDirty(r));
-  const info=$("#submitAllInfo");
-  if(info) delete info.dataset.confirming;
-  updateSubmitAll();
-}
+/* =========================================================================
+   Rendering — PFMEA
+   ========================================================================= */
+let hiOnly=false, allOpen=false, byRpn=true, CHANGE_DRAFT={};
+const f=(k,v)=>`<div class="field"><div class="k">${k}</div><div class="v${v?"":" empty"}">${v||"Not filled in yet"}</div></div>`;
+const fmtTs=ts=>{const d=new Date(Number(ts));return isNaN(d)?"":d.toLocaleString()};
+const historyHtml=r=>!r.history?.length?"":`<div class="chg-history"><div class="chg-history-title">Change history</div>${[...r.history].reverse().map(h=>`<div class="chg-entry"><div class="chg-entry-meta">${esc(fmtTs(h.ts))}${h.who?" · "+esc(h.who):""} — S ${h.from.S??"–"}→${h.to.S??"–"}, O ${h.from.O??"–"}→${h.to.O??"–"}, D ${h.from.D??"–"}→${h.to.D??"–"}</div><div class="chg-entry-reason">${esc(h.reason)}</div></div>`).join("")}</div>`;
+const evidenceHtml=r=>!r.evidence?.length?"":`<div class="evid"><div class="evid-title">Supporting evidence</div>${r.evidence.map(e=>`<div class="evid-entry"><div class="evid-entry-meta">${esc(e.date)}</div><div class="evid-entry-text">${esc(e.text)}</div>${e.url?`<a class="evid-entry-link" href="${esc(e.url)}" target="_blank" rel="noopener noreferrer">Source ↗</a>`:""}</div>`).join("")}</div>`;
 
 function render(){
   const host=$("#fmea"); host.innerHTML="";
   const visible=ROWS.filter(r=>!hiOnly||needsAction(r.S,r.O,r.D));
   let shown=0;
-
   const card=(r,rank)=>{
     shown++;
-    const i=ROWS.indexOf(r), a=ap(r.S,r.O,r.D);
-    const n=rpn(r.S,r.O,r.D), gate=gated(r.S,r.O,r.D);
+    const i=ROWS.indexOf(r), a=ap(r.S,r.O,r.D), n=rpn(r.S,r.O,r.D), gate=gated(r.S,r.O,r.D);
     const hasControl=!!(r.ch&&r.method&&r.rx);
     const el=document.createElement("article");
-    el.className="row"+(r.todo?" todo":"")+(allOpen?" open":"");
-    el.dataset.ap=a;
+    el.className="row"+(r.todo?" todo":"")+(allOpen?" open":""); el.dataset.ap=a;
     el.innerHTML=`
       <button class="rhead" aria-expanded="${allOpen}">
         ${rank?`<span class="rank">${rank}</span>`:""}
         <span class="fm">${byRpn?`<span class="sys-tag">${r.sys}</span>`:""}<b>${r.fm}</b><em>${r.fn}</em></span>
-        <span class="badges">
-          <span class="rpn${gate?" gated":""}">RPN ${n??"–"}</span>
-          <span class="ap" data-v="${a}">AP ${a}</span>
-        </span>
+        <span class="badges"><span class="rpn${gate?" gated":""}">RPN ${n??"–"}</span><span class="ap" data-v="${a}">AP ${a}</span></span>
       </button>
       <div class="rbody">
         ${f("Effect — worst credible outcome",r.eff)}
         ${evidenceHtml(r)}
-        <div class="sod">
+        <div class="sod${isDirty(r)?" dirty":""}">
           <label><div class="k">Severity</div><input type="number" min="1" max="10" value="${r.S??""}" data-i="${i}" data-k="S" placeholder="–"></label>
           <label><div class="k">Occurrence</div><input type="number" min="1" max="10" value="${r.O??""}" data-i="${i}" data-k="O" placeholder="–"></label>
           <label><div class="k">Detection</div><input type="number" min="1" max="10" value="${r.D??""}" data-i="${i}" data-k="D" placeholder="–"></label>
@@ -894,35 +725,22 @@ function render(){
         ${f("Detection control",r.det)}
         <div class="cp${hasControl?"":" missing"}">
           <h4>${hasControl?"Control plan":"No control — this row is broken"}</h4>
-          ${f("Characteristic",r.ch)}
-          ${f("Specification",r.spec)}
-          ${f("Method",r.method)}
-          ${f("Sample",r.samp)}
-          ${f("Reaction plan",r.rx)}
+          ${f("Characteristic",r.ch)}${f("Specification",r.spec)}${f("Method",r.method)}${f("Sample",r.samp)}${f("Reaction plan",r.rx)}
         </div>
       </div>`;
     return el;
   };
-
   if(byRpn){
-    const sorted=[...visible].sort((a,b)=>(rpn(b.S,b.O,b.D)??-1)-(rpn(a.S,a.O,a.D)??-1));
-    const sec=document.createElement("section");
-    sec.className="sys";
-    sec.innerHTML=`<h2>Ranked by RPN</h2>`;
-    sorted.forEach((r,ix)=>sec.appendChild(card(r,ix+1)));
+    const sec=document.createElement("section"); sec.className="sys"; sec.innerHTML=`<h2>Ranked by RPN</h2>`;
+    [...visible].sort((a,b)=>(rpn(b.S,b.O,b.D)??-1)-(rpn(a.S,a.O,a.D)??-1)).forEach((r,ix)=>sec.appendChild(card(r,ix+1)));
     host.appendChild(sec);
   } else {
     [...new Set(ROWS.map(r=>r.sys))].forEach(sysName=>{
-      const rows=visible.filter(r=>r.sys===sysName);
-      if(!rows.length) return;
-      const sec=document.createElement("section");
-      sec.className="sys";
-      sec.innerHTML=`<h2>${sysName}</h2>`;
-      rows.forEach(r=>sec.appendChild(card(r,null)));
-      host.appendChild(sec);
+      const rows=visible.filter(r=>r.sys===sysName); if(!rows.length) return;
+      const sec=document.createElement("section"); sec.className="sys"; sec.innerHTML=`<h2>${sysName}</h2>`;
+      rows.forEach(r=>sec.appendChild(card(r,null))); host.appendChild(sec);
     });
   }
-
   $("#count").textContent=`${shown} of ${ROWS.length} rows`;
   audit();
 }
@@ -930,333 +748,264 @@ function render(){
 function audit(){
   const broken=ROWS.filter(r=>needsAction(r.S,r.O,r.D)&&!(r.ch&&r.method&&r.rx));
   const gates=ROWS.filter(r=>gated(r.S,r.O,r.D));
-  const cheats=ROWS.filter(r=>r._synced.D&&r.D&&r.D<r._synced.D&&r.S===r._synced.S&&r.O===r._synced.O);
+  const cheats=ROWS.filter(r=>r._synced&&r._synced.D&&r.D&&r.D<r._synced.D&&r.S===r._synced.S&&r.O===r._synced.O);
   const unranked=ROWS.filter(r=>rpn(r.S,r.O,r.D)===null);
   const box=$("#audit");
   if(!broken.length&&!gates.length&&!cheats.length&&!unranked.length){
-    box.className="audit clean";
-    box.innerHTML="<b>Chain intact</b><p>Every row needing action has a control, no severity gates are open, and nothing was closed on detection alone.</p>";
+    box.className="audit clean"; box.innerHTML="<b>Chain intact</b><p>Every row needing action has a control, no severity gates are open, and nothing was closed on detection alone.</p>";
   } else {
     box.className="audit";
     let h="<b>Chain check</b><ul>";
     broken.forEach(r=>h+=`<li>Needs action, no control: ${r.fm}</li>`);
     gates.forEach(r=>h+=`<li>Severity gate open (sev ${r.S}, RPN ${rpn(r.S,r.O,r.D)}): ${r.fm}</li>`);
-    cheats.forEach(r=>h+=`<li>Closed on detection alone: ${r.fm}</li>`);
+    cheats.forEach(r=>h+=`<li>Detection-only reduction pending: ${r.fm}</li>`);
     if(unranked.length) h+=`<li>${unranked.length} row${unranked.length>1?"s":""} unranked — no S/O/D, so no RPN</li>`;
-    h+="</ul>";
-    box.innerHTML=h;
+    box.innerHTML=h+"</ul>";
   }
+  updateSubmitAll();
+}
+
+let submitConfirmTimer=null;
+function showSubmitConfirmation(text){
+  const info=$("#submitAllInfo"); info.innerHTML=text; info.dataset.confirming="1";
+  clearTimeout(submitConfirmTimer);
+  submitConfirmTimer=setTimeout(()=>{ delete info.dataset.confirming; updateSubmitAll(); },5000);
+}
+function updateSubmitAll(){
+  const info=$("#submitAllInfo"), btn=$("#submitAllBtn");
+  if(info.dataset.confirming) return;
+  const pending=pendingChanges();
+  if(!pending.length){ info.innerHTML="No pending score changes."; btn.disabled=true; return; }
+  const missing=pending.filter(({i})=>!(CHANGE_DRAFT[i]&&CHANGE_DRAFT[i].trim()));
+  if(missing.length){
+    info.innerHTML=`<b>${pending.length} score${pending.length>1?"s":""} changed</b><span class="missing">${missing.length} still need${missing.length===1?"s":""} a reason before you can submit: ${missing.map(({r})=>esc(r.fm)).join(", ")}</span>`;
+    btn.disabled=true;
+  } else {
+    info.innerHTML=`<b>${pending.length} change${pending.length>1?"s":""} ready</b>Every changed score has a reason. Submit to log ${pending.length>1?"them":"it"} to the Sheet.`;
+    btn.disabled=false;
+  }
+}
+function updateChangeGate(row,r){
+  row.querySelector(".sod")?.classList.toggle("dirty",isDirty(r));
+  delete $("#submitAllInfo").dataset.confirming;
   updateSubmitAll();
 }
 
 function controlPlan(){
   const rows=[...ROWS].sort((a,b)=>(rpn(b.S,b.O,b.D)??-1)-(rpn(a.S,a.O,a.D)??-1));
-  $("#cplan").innerHTML=`
-    <h2>Control plan</h2>
-    <p>Every line traces to a failure mode in the FMEA — same rows, control-plan view. Sorted by RPN. Red rows are severity 9 or 10.</p>
-    <div class="cpwrap"><table class="cpt">
-      <thead><tr>
-        <th>System</th><th>Characteristic</th><th>Specification</th><th>Method</th>
-        <th>Sample / freq</th><th>Reaction plan</th><th>S</th><th>RPN</th>
-      </tr></thead>
-      <tbody>
-      ${rows.map(r=>{
-        const n=rpn(r.S,r.O,r.D);
-        const filled=!!(r.ch&&r.method&&r.rx);
-        return `<tr class="${r.S>=9?"sev-hi":""}">
-          <td>${r.sys}</td>
-          <td>${filled?r.ch:`<span class="gap">${r.fm}</span>`}${r.S>=9&&filled?'<br><span class="sc">SPECIAL CHAR</span>':""}</td>
-          <td>${r.spec||'<span class="gap">no spec defined</span>'}</td>
-          <td>${r.method||'<span class="gap">no method</span>'}</td>
-          <td>${r.samp||"—"}</td>
-          <td class="rx">${r.rx||'<span class="gap">NO REACTION PLAN</span>'}</td>
-          <td class="n">${r.S??"–"}</td>
-          <td class="n">${n??"–"}</td>
-        </tr>`;
-      }).join("")}
-      </tbody>
-    </table></div>`;
+  $("#v-cp").innerHTML=`<h2>Control plan</h2>
+    <p class="lede">Every line traces to a failure mode — same rows, control-plan view. Sorted by RPN. Red rows are severity 9 or 10.</p>
+    <div class="tw"><table class="t" style="min-width:900px"><thead><tr><th>System</th><th>Characteristic</th><th>Specification</th><th>Method</th><th>Sample / freq</th><th>Reaction plan</th><th>S</th><th>RPN</th></tr></thead><tbody>
+    ${rows.map(r=>{const n=rpn(r.S,r.O,r.D), filled=!!(r.ch&&r.method&&r.rx);return `<tr class="${r.S>=9?"sev-hi":""}"><td>${r.sys}</td><td>${filled?r.ch:`<span class="gap">${r.fm}</span>`}${r.S>=9&&filled?'<br><span class="sc">SPECIAL CHAR</span>':""}</td><td>${r.spec||'<span class="gap">no spec defined</span>'}</td><td>${r.method||'<span class="gap">no method</span>'}</td><td>${r.samp||"—"}</td><td class="rx">${r.rx||'<span class="gap">NO REACTION PLAN</span>'}</td><td class="n">${r.S??"–"}</td><td class="n">${n??"–"}</td></tr>`}).join("")}
+    </tbody></table></div>`;
 }
 
+let DRAFT={};
 function checklist(){
   const items=ROWS.filter(r=>r.ch&&r.method).sort((a,b)=>(rpn(b.S,b.O,b.D)??-1)-(rpn(a.S,a.O,a.D)??-1));
   const today=new Date().toISOString().slice(0,10);
-  $("#checklist").innerHTML=`
-    <h2>Pre-grid checklist</h2>
-    <p>Generated from the control plan rows. Highest RPN first. Click a box to mark pass or fail — fail prompts for a note. Save session banks this run to the log below for later review.</p>
-    <div class="chk-head">
-      <label>Session date<input type="date" id="sess-date" value="${today}"></label>
-      <label>Session note (optional)<input type="text" id="sess-note" placeholder="e.g. Laguna Seca test day"></label>
-      <span class="sep"></span>
-      <button id="sess-save">Save session</button>
-    </div>
-    ${items.map(r=>{
-      const d=DRAFT[r.ch]||{};
-      const st=d.status;
-      return `
-      <div class="chk-item${st?" "+st:""}">
-        <button type="button" class="chk-box" data-status="${st||""}" data-ch="${esc(r.ch)}" aria-label="Mark ${esc(r.ch)} pass or fail">${st==="pass"?"✓":st==="fail"?"✕":""}</button>
-        <div class="t">
-          <b>${r.ch}</b>
-          <span>${r.spec} — ${r.method} — ${r.samp}</span>
-          <span class="rx">If it fails: ${r.rx}</span>
-          ${st==="fail"?`<input type="text" class="chk-note" data-ch="${esc(r.ch)}" placeholder="What did you find?" value="${esc(d.note||"")}">`:""}
-        </div>
-      </div>`;
-    }).join("")}
-    <p class="chk-msg" id="chk-msg" hidden></p>`;
+  $("#v-chk").innerHTML=`<h2>Pre-grid checklist</h2>
+    <p class="lede">Generated from the control plan rows, highest RPN first. Click a box to mark pass or fail — fail prompts for a note. Save session logs the whole run to the Sheet.</p>
+    <div class="head"><label>Session date<input type="date" id="sess-date" value="${today}"></label><label>Session note (optional)<input type="text" id="sess-note" placeholder="e.g. first start-up, shakedown, Laguna test day"></label><button id="sess-save">Save session</button></div>
+    ${items.map(r=>{const d=DRAFT[r.ch]||{}, st=d.status;return `<div class="chk-item${st?" "+st:""}"><button type="button" class="chk-box" data-status="${st||""}" data-ch="${esc(r.ch)}" aria-label="Mark pass or fail">${st==="pass"?"✓":st==="fail"?"✕":""}</button><div class="t"><b>${r.ch}</b><span>${r.spec} — ${r.method} — ${r.samp}</span><span class="rx">If it fails: ${r.rx}</span>${st==="fail"?`<input type="text" class="chk-note" data-ch="${esc(r.ch)}" placeholder="What did you find?" value="${esc(d.note||"")}">`:""}</div></div>`}).join("")}
+    <p class="msg" id="chk-msg"></p>`;
 }
 
-function sessionLog(){
-  const host=$("#seclog");
-  if(!SESSIONS.length){
-    host.innerHTML=`<h2>Session log</h2><p class="log-empty">No sessions banked yet. Fill out the pre-grid checklist and hit Save session.</p>`;
-    return;
-  }
-  const sorted=[...SESSIONS].sort((a,b)=>b.ts-a.ts);
-  host.innerHTML=`
-    <h2>Session log</h2>
-    <p>${SESSIONS.length} session${SESSIONS.length>1?"s":""} banked, most recent first. Saved to this browser only — export for a portable copy.</p>
-    <button id="export-log">⬇ Export session log</button>
-    ${sorted.map(s=>{
-      const passes=s.entries.filter(e=>e.status==="pass").length;
-      const fails=s.entries.filter(e=>e.status==="fail").length;
-      const unchecked=s.entries.filter(e=>e.status==="unchecked").length;
-      return `
-      <div class="sess-block">
-        <div class="sess-hd">
-          <div><b>${esc(s.date)}</b>${s.note?` — ${esc(s.note)}`:""}<div class="meta">${passes} passed, ${fails} failed, ${unchecked} unchecked</div></div>
-          <span class="sep"></span>
-          <button class="sess-del" data-ts="${s.ts}">Delete session</button>
-        </div>
-        <div class="seswrap"><table class="sest">
-          <thead><tr><th>System</th><th>Characteristic</th><th>Status</th><th>Note</th></tr></thead>
-          <tbody>
-          ${s.entries.map(e=>`<tr class="${e.status==="fail"?"fail":""}">
-            <td>${esc(e.sys)}</td><td>${esc(e.ch)}</td>
-            <td class="status-${e.status}">${esc(e.status)}</td>
-            <td>${e.note?esc(e.note):"—"}</td>
-          </tr>`).join("")}
-          </tbody>
-        </table></div>
-      </div>`;
-    }).join("")}`;
+/* =========================================================================
+   Rendering — Data log
+   ========================================================================= */
+function renderChanges(){
+  const host=$("#v-changes");
+  const rows=[...CHANGES].sort((a,b)=>Number(b.ts)-Number(a.ts));
+  host.innerHTML=`<h2>Score changes</h2><p class="lede">${rows.length?`${rows.length} logged change${rows.length>1?"s":""}, newest first — straight from the Sheet's ScoreChanges tab.`:"No score changes logged yet. Edit an S/O/D on the FMEA tab, give a reason, and submit."}</p>`+
+    (rows.length?`<div class="tw"><table class="t"><thead><tr><th>When</th><th>Who</th><th>Row</th><th>S</th><th>O</th><th>D</th><th>Reason</th></tr></thead><tbody>${rows.map(c=>`<tr><td class="m">${esc(fmtTs(c.ts))}</td><td>${esc(c.who)}</td><td>${esc(c.failureMode)}</td><td class="n">${esc(c.fromS)}→${esc(c.toS)}</td><td class="n">${esc(c.fromO)}→${esc(c.toO)}</td><td class="n">${esc(c.fromD)}→${esc(c.toD)}</td><td>${esc(c.reason)}</td></tr>`).join("")}</tbody></table></div>`:"");
 }
-
+function renderSessions(){
+  const host=$("#v-sessions"), sessions=groupedSessions();
+  if(!sessions.length){ host.innerHTML=`<h2>Sessions</h2><p class="empty">No checklist runs logged yet. Fill out the Pre-grid checklist and hit Save session.</p>`; return; }
+  host.innerHTML=`<h2>Sessions</h2><p class="lede">${sessions.length} run${sessions.length>1?"s":""} logged, most recent first.</p>`+sessions.map(s=>{
+    const p=s.entries.filter(e=>e.status==="pass").length, fl=s.entries.filter(e=>e.status==="fail").length, u=s.entries.filter(e=>e.status==="unchecked").length;
+    return `<div class="sess-block"><div class="sess-hd"><div><b>${esc(s.date)}</b>${s.note?` — ${esc(s.note)}`:""}${s.who?` <span class="cwhen">by ${esc(s.who)}</span>`:""}<div class="meta">${p} passed, ${fl} failed, ${u} unchecked</div></div></div>
+      <div class="tw"><table class="t"><thead><tr><th>System</th><th>Characteristic</th><th>Status</th><th>Note</th></tr></thead><tbody>${s.entries.map(e=>`<tr class="${e.status==="fail"?"fail":""}"><td>${esc(e.sys)}</td><td>${esc(e.ch)}</td><td class="status-${esc(e.status)}">${esc(e.status)}</td><td>${e.note?esc(e.note):"—"}</td></tr>`).join("")}</tbody></table></div></div>`;
+  }).join("");
+}
 function renderComments(){
-  const list=$("#c-list");
-  if(!COMMENTS.length){
-    list.innerHTML=`<p class="clist-empty">No comments yet — be the first to say something.</p>`;
-    return;
-  }
-  const sorted=[...COMMENTS].sort((a,b)=>b.ts-a.ts);
-  list.innerHTML=sorted.map(c=>`
-    <div class="citem">
-      <span class="cwho">${esc(c.name||"Anonymous")}</span><span class="cwhen">${esc(new Date(c.ts).toLocaleString())}</span>
-      <div class="ctext">${esc(c.text)}</div>
-      <button class="cdel" data-ts="${c.ts}">Delete</button>
-    </div>`).join("");
+  const host=$("#v-comments"), rows=[...COMMENTS].sort((a,b)=>Number(b.ts)-Number(a.ts));
+  host.innerHTML=`<h2>Comments</h2><p class="lede">Open notes — questions, observations, things to chase. Logged to the Sheet with your name.</p>
+    <div class="cbox"><textarea id="c-text" placeholder="Type a comment…"></textarea><button id="c-post">Post comment</button></div><p class="msg" id="c-msg"></p>
+    ${rows.length?rows.map(c=>`<div class="citem"><span class="cwho">${esc(c.name||"—")}</span><span class="cwhen">${esc(fmtTs(c.ts))}</span><div class="ctext">${esc(c.text)}</div></div>`).join(""):`<p class="empty">No comments yet.</p>`}`;
 }
 
-document.addEventListener("click",e=>{
-  const h=e.target.closest(".rhead");
-  if(h){
-    const row=h.closest(".row"), open=row.classList.toggle("open");
-    h.setAttribute("aria-expanded",open);
-    return;
-  }
-  const box=e.target.closest(".chk-box");
-  if(box){
-    const ch=box.dataset.ch;
-    const cur=DRAFT[ch]||{};
-    const next=cur.status==="pass"?"fail":cur.status==="fail"?undefined:"pass";
-    DRAFT[ch]={...cur,status:next};
-    checklist();
-    return;
-  }
-  if(e.target.id==="sess-save"){ saveSession(); return; }
-  if(e.target.id==="export-log"){
-    const blob=new Blob([JSON.stringify(SESSIONS,null,2)],{type:"application/json"});
-    const a=document.createElement("a");
-    a.href=URL.createObjectURL(blob); a.download="944-fmea-sessions.json"; a.click();
-    return;
-  }
-  if(e.target.id==="export-comments"){
-    const blob=new Blob([JSON.stringify(COMMENTS,null,2)],{type:"application/json"});
-    const a=document.createElement("a");
-    a.href=URL.createObjectURL(blob); a.download="944-fmea-comments.json"; a.click();
-    return;
-  }
-  const sdel=e.target.closest(".sess-del");
-  if(sdel){
-    if(confirm("Delete this banked session? This cannot be undone.")){
-      const ts=Number(sdel.dataset.ts);
-      SESSIONS=SESSIONS.filter(s=>s.ts!==ts);
-      saveSessions();
-      sessionLog();
-    }
-    return;
-  }
-  if(e.target.id==="c-post"){
-    const nameInp=$("#c-name"), textInp=$("#c-text");
-    const text=textInp.value.trim();
-    if(!text) return;
-    COMMENTS.push({name:nameInp.value.trim(), text, ts:Date.now()});
-    saveComments();
-    textInp.value="";
-    renderComments();
-    return;
-  }
-  const cdel=e.target.closest(".cdel");
-  if(cdel){
-    const ts=Number(cdel.dataset.ts);
-    COMMENTS=COMMENTS.filter(c=>c.ts!==ts);
-    saveComments();
-    renderComments();
-    return;
-  }
-  if(e.target.id==="submitAllBtn"){
-    const pending=pendingChanges();
-    const missing=pending.filter(({i})=>!(CHANGE_DRAFT[i]&&CHANGE_DRAFT[i].trim()));
-    if(!pending.length||missing.length) return;
-    const ts=Date.now();
-    pending.forEach(({i,r})=>{
-      const synced=r._synced||{S:r.S,O:r.O,D:r.D};
-      const entry={ts, reason:CHANGE_DRAFT[i].trim(), from:{...synced}, to:{S:r.S,O:r.O,D:r.D}};
-      r.history=[...(r.history||[]), entry];
-      r._synced={S:r.S,O:r.O,D:r.D};
-    });
-    CHANGE_DRAFT={};
-    saveRows();
-    render();
-    showSubmitConfirmation(`<b>${pending.length} change${pending.length>1?"s":""} submitted</b>Logged to change history.`);
-    return;
-  }
-});
-document.addEventListener("input",e=>{
-  const note=e.target.closest(".chk-note");
-  if(note){
-    const ch=note.dataset.ch;
-    DRAFT[ch]={...(DRAFT[ch]||{}),note:note.value};
-    return;
-  }
-  const reasonEl=e.target.closest(".chg-reason");
-  if(reasonEl){
-    const i=Number(reasonEl.dataset.i);
-    CHANGE_DRAFT[i]=reasonEl.value;
-    const info=$("#submitAllInfo");
-    if(info) delete info.dataset.confirming;
-    updateSubmitAll();
-    return;
-  }
-});
-function saveSession(){
-  const dateInp=$("#sess-date"), noteInp=$("#sess-note"), msg=$("#chk-msg");
-  const items=ROWS.filter(r=>r.ch&&r.method);
-  const entries=items.map(r=>({
-    ch:r.ch, sys:r.sys,
-    status:(DRAFT[r.ch]&&DRAFT[r.ch].status)||"unchecked",
-    note:(DRAFT[r.ch]&&DRAFT[r.ch].note)||""
-  }));
-  const checked=entries.filter(en=>en.status!=="unchecked").length;
-  if(checked===0){
-    msg.hidden=false; msg.style.color="var(--hi)";
-    msg.textContent="Mark at least one item before saving — nothing to bank yet.";
-    return;
-  }
-  SESSIONS.push({
-    date: dateInp.value || new Date().toISOString().slice(0,10),
-    note: noteInp.value || "",
-    ts: Date.now(),
-    entries
-  });
-  saveSessions();
-  const fails=entries.filter(en=>en.status==="fail").length;
-  DRAFT={};
-  checklist();
-  const msg2=$("#chk-msg");
-  msg2.hidden=false; msg2.style.color="var(--lo)";
-  msg2.textContent=`Session banked — ${checked} of ${entries.length} items checked, ${fails} failed. See Session log.`;
+/* =========================================================================
+   Rendering — Tasks
+   ========================================================================= */
+function renderTasks(){
+  const {known,suggested}=taskState();
+  const host=$("#v-tasks");
+  const item=t=>`<div class="task ${t.status}"><button type="button" class="tstat" data-s="${t.status}" data-id="${esc(t.taskId)}" title="Click to change status">${t.status}</button><div class="tb"><b>${esc(t.title)}</b><span class="src">${esc(t.source||"")}</span><textarea class="tn" data-id="${esc(t.taskId)}" placeholder="Notes — parts, numbers, what you found…">${esc(t.notes||"")}</textarea><div class="tmeta">last update ${esc(fmtTs(t.ts))}${t.who?" · "+esc(t.who):""}</div></div></div>`;
+  const sug=t=>`<div class="task suggest"><span class="tstat" data-s="todo" style="cursor:default;opacity:.55">todo</span><div class="tb"><b>${esc(t.title)}</b><span class="src">${esc(t.source||"")}</span></div><button type="button" class="add" data-id="${esc(t.taskId)}">Add</button></div>`;
+  host.innerHTML=`<h2>Task list</h2><p class="lede">The winter build punch list. Click a status to cycle todo → doing → done; notes save when you click away. Everything logs to the Sheet.</p>
+    <h3>Add a task</h3>
+    <div class="cbox"><input class="txt" id="t-title" placeholder="What needs doing?"><textarea id="t-notes" placeholder="Notes (optional)"></textarea><button id="t-add">Add task</button></div><p class="msg" id="t-msg"></p>
+    <h3>Open</h3>${known.filter(t=>t.status!=="done").map(item).join("")||`<p class="empty">Nothing open. Add a task above or accept a suggestion below.</p>`}
+    <h3>Suggested from the FMEA</h3><p class="lede">Rows on the sheet that imply build work. Add one to start tracking it.</p>${suggested.map(sug).join("")||`<p class="empty">Every suggested task has been added.</p>`}
+    <h3>Done</h3>${known.filter(t=>t.status==="done").map(item).join("")||`<p class="empty">Nothing finished yet.</p>`}`;
 }
-document.addEventListener("input",e=>{
-  const inp=e.target.closest("input[data-k]");
-  if(!inp) return;
-  const v=parseInt(inp.value,10);
-  ROWS[inp.dataset.i][inp.dataset.k]=(v>=1&&v<=10)?v:null;
-  const r=ROWS[inp.dataset.i], a=ap(r.S,r.O,r.D);
-  const row=inp.closest(".row");
-  row.dataset.ap=a;
-  const badge=row.querySelector(".ap");
-  badge.dataset.v=a; badge.textContent="AP "+a;
-  const n=rpn(r.S,r.O,r.D), gate=gated(r.S,r.O,r.D);
-  const rb=row.querySelector(".rpn");
-  rb.textContent="RPN "+(n??"–");
-  rb.classList.toggle("gated",!!gate);
-  const body=row.querySelector(".rbody");
-  let note=body.querySelector(".gate-note");
-  if(gate){
-    if(!note){
-      note=document.createElement("div");
-      note.className="gate-note";
-      body.querySelector(".sod").after(note);
-    }
-    note.innerHTML="<b>Severity gate — action required</b>"+gate;
-  } else if(note){ note.remove(); }
-  if(inp.dataset.k==="D") flagDetectionClose(row,r);
-  audit();
-  updateChangeGate(row,r);
-});
-$("#f-hi").onclick=e=>{hiOnly=!hiOnly;e.currentTarget.setAttribute("aria-pressed",hiOnly);render()};
-$("#expand").onclick=e=>{
-  allOpen=!allOpen; e.currentTarget.textContent=allOpen?"Collapse all":"Expand all"; render();
-};
-$("#v-fmea").onclick=()=>setView("fmea");
-$("#v-cp").onclick=()=>setView("cp");
-$("#v-chk").onclick=()=>setView("chk");
-$("#v-log").onclick=()=>setView("log");
-$("#v-ref").onclick=()=>setView("ref");
-function setView(v){
-  view=v;
-  $("#v-fmea").setAttribute("aria-pressed",v==="fmea");
-  $("#v-cp").setAttribute("aria-pressed",v==="cp");
-  $("#v-chk").setAttribute("aria-pressed",v==="chk");
-  $("#v-log").setAttribute("aria-pressed",v==="log");
-  $("#v-ref").setAttribute("aria-pressed",v==="ref");
-  $("#fmea").classList.toggle("hide",v!=="fmea");
-  $("#submitAll").classList.toggle("hide",v!=="fmea");
-  $("#audit").classList.toggle("hide",v!=="fmea");
-  $("#f-hi").classList.toggle("hide",v!=="fmea");
-  $("#expand").classList.toggle("hide",v!=="fmea");
-  $("#sort").classList.toggle("hide",v!=="fmea");
-  $("#cplan").classList.toggle("hide",v!=="cp");
-  $("#checklist").classList.toggle("hide",v!=="chk");
-  $("#seclog").classList.toggle("hide",v!=="log");
-  $("#refguide").classList.toggle("hide",v!=="ref");
+
+/* =========================================================================
+   Navigation
+   ========================================================================= */
+let SECTION="pfmea", VIEW={pfmea:"fmea",log:"changes",tasks:"tasks"};
+function showSection(s){
+  SECTION=s;
+  $$(".nav1 button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.s===s));
+  ["pfmea","log","tasks"].forEach(k=>$("#s-"+k).classList.toggle("hide",k!==s));
+  if(s==="log"){ renderChanges(); renderSessions(); renderComments(); }
+  if(s==="tasks") renderTasks();
+  showView(s,VIEW[s]);
+}
+function showView(s,v){
+  VIEW[s]=v;
+  const sec=$("#s-"+s);
+  sec.querySelectorAll(".nav2 [data-v]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.v===v));
+  sec.querySelectorAll("[id^='v-']").forEach(el=>el.classList.toggle("hide",el.id!=="v-"+v));
+  $$(".fmea-only").forEach(b=>b.classList.toggle("hide",!(s==="pfmea"&&v==="fmea")));
+  $("#count").classList.toggle("hide",!(s==="pfmea"&&v==="fmea"));
   if(v==="cp") controlPlan();
   if(v==="chk") checklist();
-  if(v==="log") sessionLog();
 }
-$("#sort").onclick=e=>{
-  byRpn=!byRpn;
-  e.currentTarget.textContent=byRpn?"Group by system":"Rank by RPN";
-  render();
-};
-$("#reset").onclick=()=>{
-  if(!confirm("Reset to defaults? This clears every saved edit and change history in this browser and cannot be undone.")) return;
-  ROWS.length=0;
-  ORIGINAL_ROWS.forEach(r=>ROWS.push(JSON.parse(JSON.stringify(r))));
-  ROWS.forEach(r=>{ r._synced={S:r.S,O:r.O,D:r.D}; });
-  localStorage.removeItem(STORAGE_KEY);
-  render();
-};
-$("#print").onclick=()=>window.print();
-$("#export").onclick=()=>{
-  const blob=new Blob([JSON.stringify(ROWS,null,2)],{type:"application/json"});
-  const a=document.createElement("a");
-  a.href=URL.createObjectURL(blob); a.download="944-fmea.json"; a.click();
-};
-render();
-renderComments();
+document.addEventListener("click",async e=>{
+  const n1=e.target.closest(".nav1 button"); if(n1){ showSection(n1.dataset.s); return; }
+  const n2=e.target.closest(".nav2 [data-v]"); if(n2){ showView(SECTION,n2.dataset.v); return; }
+
+  const h=e.target.closest(".rhead"); if(h){ const row=h.closest(".row"), open=row.classList.toggle("open"); h.setAttribute("aria-expanded",open); return; }
+
+  const box=e.target.closest(".chk-box");
+  if(box){ const ch=box.dataset.ch, cur=DRAFT[ch]||{}; DRAFT[ch]={...cur,status:cur.status==="pass"?"fail":cur.status==="fail"?undefined:"pass"}; checklist(); return; }
+
+  if(e.target.id==="sess-save"){ await saveSession(); return; }
+  if(e.target.id==="c-post"){ await postComment(); return; }
+  if(e.target.id==="submitAllBtn"){ await submitAll(); return; }
+  if(e.target.id==="t-add"){ await addTask(); return; }
+  const add=e.target.closest(".task .add"); if(add){ await acceptSuggested(add.dataset.id); return; }
+  const ts=e.target.closest("button.tstat[data-id]"); if(ts){ await cycleTask(ts.dataset.id); return; }
+  if(e.target.id==="refresh"){ await loadAll(true); return; }
+  if(e.target.id==="f-hi"){ hiOnly=!hiOnly; e.target.setAttribute("aria-pressed",hiOnly); render(); return; }
+  if(e.target.id==="sort"){ byRpn=!byRpn; e.target.textContent=byRpn?"Group by system":"Rank by RPN"; render(); return; }
+  if(e.target.id==="expand"){ allOpen=!allOpen; e.target.textContent=allOpen?"Collapse all":"Expand all"; render(); return; }
+  if(e.target.id==="print"){ window.print(); return; }
+  if(e.target.id==="export"){
+    const blob=new Blob([JSON.stringify({rows:ROWS.map(({_synced,...r})=>r),changes:CHANGES,sessions:SESSIONS,comments:COMMENTS,tasks:TASKEVENTS},null,2)],{type:"application/json"});
+    const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="944-pfmea.json"; a.click(); return;
+  }
+});
+document.addEventListener("input",e=>{
+  const note=e.target.closest(".chk-note"); if(note){ DRAFT[note.dataset.ch]={...(DRAFT[note.dataset.ch]||{}),note:note.value}; return; }
+  const reason=e.target.closest(".chg-reason"); if(reason){ CHANGE_DRAFT[Number(reason.dataset.i)]=reason.value; delete $("#submitAllInfo").dataset.confirming; updateSubmitAll(); return; }
+  const inp=e.target.closest("input[data-k]");
+  if(inp){
+    const v=parseInt(inp.value,10), r=ROWS[inp.dataset.i]; r[inp.dataset.k]=(v>=1&&v<=10)?v:null;
+    const row=inp.closest(".row"), a=ap(r.S,r.O,r.D), n=rpn(r.S,r.O,r.D), gate=gated(r.S,r.O,r.D);
+    row.dataset.ap=a; const badge=row.querySelector(".ap"); badge.dataset.v=a; badge.textContent="AP "+a;
+    const rb=row.querySelector(".rpn"); rb.textContent="RPN "+(n??"–"); rb.classList.toggle("gated",!!gate);
+    const body=row.querySelector(".rbody"); let note=body.querySelector(".gate-note");
+    if(gate){ if(!note){ note=document.createElement("div"); note.className="gate-note"; body.querySelector(".sod").after(note); } note.innerHTML="<b>Severity gate — action required</b>"+gate; }
+    else if(note) note.remove();
+    audit(); updateChangeGate(row,r);
+  }
+});
+document.addEventListener("focusout",async e=>{
+  const tn=e.target.closest(".task .tn"); if(!tn) return;
+  const {known}=taskState(); const t=known.find(x=>x.taskId===tn.dataset.id); if(!t||t.notes===tn.value) return;
+  await postTask({...t,notes:tn.value});
+});
+
+/* =========================================================================
+   Submissions
+   ========================================================================= */
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+
+async function submitAll(){
+  const pending=pendingChanges();
+  const missing=pending.filter(({i})=>!(CHANGE_DRAFT[i]&&CHANGE_DRAFT[i].trim()));
+  if(!pending.length||missing.length) return;
+  if(!requireWho()){ showSubmitConfirmation(`<b>Add your name first</b><span class="missing">Every logged change records who made it.</span>`); return; }
+  const ts=Date.now();
+  const rows=pending.map(({i,r})=>{const s=r._synced;return {ts,rowIndex:i,failureMode:r.fm,fromS:s.S,fromO:s.O,fromD:s.D,toS:r.S,toO:r.O,toD:r.D,reason:CHANGE_DRAFT[i].trim(),who:who()}});
+  $("#submitAllBtn").disabled=true;
+  const sent=await sheetPost("ScoreChanges",rows);
+  // Optimistic: fold into the local log so the UI is right immediately; a reload reconciles.
+  CHANGES.push(...rows); CHANGE_DRAFT={}; applyChanges(); render();
+  showSubmitConfirmation(sent?`<b>${rows.length} change${rows.length>1?"s":""} submitted</b>Logged to the Sheet.`:`<b>${rows.length} change${rows.length>1?"s":""} queued</b><span class="missing">Sheet unreachable — will send when you're back online.</span>`);
+  if(sent){ await wait(1500); CHANGES=await sheetGet("ScoreChanges").catch(()=>CHANGES); applyChanges(); if(!document.querySelector(".row.open")) render(); }
+}
+
+async function saveSession(){
+  const msg=$("#chk-msg"); if(!requireWho(msg)) return;
+  const items=ROWS.filter(r=>r.ch&&r.method);
+  const ts=Date.now(), date=$("#sess-date").value||new Date().toISOString().slice(0,10), note=$("#sess-note").value||"";
+  const rows=items.map(r=>({ts,sessionDate:date,sessionNote:note,sys:r.sys,characteristic:r.ch,status:(DRAFT[r.ch]&&DRAFT[r.ch].status)||"unchecked",itemNote:(DRAFT[r.ch]&&DRAFT[r.ch].note)||"",who:who()}));
+  const checked=rows.filter(x=>x.status!=="unchecked").length;
+  if(!checked){ msg.className="msg err"; msg.textContent="Mark at least one item before saving — nothing to log yet."; return; }
+  const sent=await sheetPost("Sessions",rows);
+  SESSIONS.push(...rows); DRAFT={}; checklist();
+  const m=$("#chk-msg"); m.className="msg ok";
+  m.textContent=sent?`Session logged — ${checked} of ${rows.length} items checked, ${rows.filter(x=>x.status==="fail").length} failed. See Data log → Sessions.`:`Session queued (offline) — ${checked} items checked. It'll send when you reconnect.`;
+}
+
+async function postComment(){
+  const msg=$("#c-msg"), text=($("#c-text").value||"").trim();
+  if(!text){ msg.className="msg err"; msg.textContent="Type a comment first."; return; }
+  if(!requireWho(msg)) return;
+  const row={ts:Date.now(),name:who(),text};
+  const sent=await sheetPost("Comments",[row]);
+  COMMENTS.push(row); renderComments();
+  const m=$("#c-msg"); m.className="msg ok"; m.textContent=sent?"Posted.":"Queued — will post when back online.";
+}
+
+async function postTask(t){
+  const row={ts:Date.now(),taskId:t.taskId,title:t.title,source:t.source||"",status:t.status||"todo",notes:t.notes||"",who:who()};
+  const sent=await sheetPost("BuildTasks",[row]);
+  TASKEVENTS.push(row); renderTasks();
+  return sent;
+}
+async function addTask(){
+  const msg=$("#t-msg"), title=($("#t-title").value||"").trim();
+  if(!title){ msg.className="msg err"; msg.textContent="Give the task a title."; return; }
+  if(!requireWho(msg)) return;
+  await postTask({taskId:"ff-"+Date.now(),title,source:"added by "+who(),status:"todo",notes:($("#t-notes").value||"").trim()});
+}
+async function acceptSuggested(id){
+  if(!requireWho($("#t-msg"))) return;
+  const {suggested}=taskState(); const t=suggested.find(x=>x.taskId===id); if(!t) return;
+  await postTask({...t,status:"todo",notes:""});
+}
+async function cycleTask(id){
+  if(!requireWho($("#t-msg"))) return;
+  const {known}=taskState(); const t=known.find(x=>x.taskId===id); if(!t) return;
+  const next={todo:"doing",doing:"done",done:"todo"}[t.status]||"todo";
+  await postTask({...t,status:next});
+}
+
+/* =========================================================================
+   Boot
+   ========================================================================= */
+async function loadAll(manual){
+  if(manual) setConn(null);
+  try{
+    const [c,s,cm,t]=await Promise.all([sheetGet("ScoreChanges"),sheetGet("Sessions"),sheetGet("Comments"),sheetGet("BuildTasks")]);
+    CHANGES=c; SESSIONS=s; COMMENTS=cm; TASKEVENTS=t;
+    // sheetGet falls back to cache silently; LAST_FETCH_OK says whether the network actually answered.
+    setConn(LAST_FETCH_OK);
+    if(LAST_FETCH_OK){ const n=await flushOutbox(); if(n){ await wait(1500); return loadAll(false); } }
+  }catch(e){ setConn(false,"no cached copy"); }
+  applyChanges();
+  if(SECTION==="pfmea"){ if(!document.querySelector(".row.open")) render(); else audit(); if(VIEW.pfmea==="cp") controlPlan(); }
+  if(SECTION==="log"){ renderChanges(); renderSessions(); renderComments(); }
+  if(SECTION==="tasks") renderTasks();
+}
+applyChanges(); render();
+loadAll(false);
 </script>
 </body>
 </html>
